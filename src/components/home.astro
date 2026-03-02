@@ -1,0 +1,107 @@
+---
+import LogoWall from "../components/logoWall.astro";
+import { Image } from "astro:assets";
+import profileImg from "../../public/profile.png";
+---
+
+<section class="text-[var(--white)] relative overflow-hidden" id="home">
+  <!-- Background Typography Decoration -->
+  <div
+    class="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]"
+  >
+    <span
+      class="text-[12rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem] xl:text-[30rem] font-serif italic text-[var(--white)] whitespace-nowrap"
+    >
+      Farhan
+    </span>
+  </div>
+
+  <div
+    class="max-w-6xl mx-auto px-4 relative z-10 min-h-[70vh] md:min-h-screen flex items-center justify-center"
+  >
+    <!-- Hero Content Centered -->
+    <div class="flex flex-col items-center text-center space-y-6 md:space-y-8">
+      <!-- Main Name with Photo -->
+      <div class="flex items-center justify-center gap-4 md:gap-6">
+        <!-- First Name -->
+        <h1
+          class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif italic text-[var(--sec)]"
+        >
+          Farhan
+        </h1>
+
+        <!-- Profile Photo with Star -->
+        <div class="relative">
+          <div
+            class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[var(--white-icon-tr)] shadow-2xl"
+          >
+            <Image
+              src={profileImg}
+              alt="Farhan Harits Prakoso"
+              width={128}
+              height={128}
+              format="webp"
+              quality={80}
+              class="w-full h-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <h1
+          class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif italic text-[var(--sec)]"
+        >
+          Harits
+        </h1>
+      </div>
+      <!-- Description -->
+      <p
+        class="text-base md:text-lg lg:text-xl text-[var(--white-icon)] max-w-2xl leading-relaxed"
+      >
+        A <span class="text-[var(--sec)] shiny-sec">front-end developer</span>,
+        UI designer, and all-around doodler who<br class="hidden md:block" />
+        enjoys developing accessible, usable and engaging websites &<br
+          class="hidden md:block"
+        />
+        apps that bring your products to life.
+      </p>
+
+      <!-- Download CV Button -->
+      <a
+        href="/cv.pdf"
+        download
+        class="inline-flex items-center gap-2 px-6 py-3 mt-2 text-sm font-medium text-[var(--background)] bg-[var(--white)] rounded-full hover:bg-[var(--sec)] hover:text-[var(--white)] transition-all duration-300 group"
+      >
+        Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Logo Wall - Tech Stack -->
+<div class="pb-16 md:pb-24">
+  <LogoWall />
+</div>
+
+<style is:global>
+  .shiny-sec {
+    background: linear-gradient(135deg, #6c8e53 25%, #dbecc8 50%, #6c8e53 75%);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+  }
+
+  @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+interface Experience {
+  role: string;
+  company: string;
+  period: string;
+  description: string;
+}
+
+const experiences: Experience[] = [
+  {
+    role: "Front-End Developer",
+    company: "Freelance",
+    period: "2024 — Present",
+    description:
+      "Building modern, responsive websites for clients using Astro, React, and TailwindCSS. Focused on performance, accessibility, and clean design.",
+  },
+  {
+    role: "UI/UX Designer",
+    company: "Personal Projects",
+    period: "2023 — Present",
+    description:
+      "Designing intuitive interfaces and user flows for web applications. Exploring design systems, prototyping in Figma, and iterating on real user feedback.",
+  },
+  {
+    role: "Open Source Contributor",
+    company: "svgl.app & Others",
+    period: "2023 — Present",
+    description:
+      "Contributing to open-source projects, improving core components, search features, and documentation across multiple repositories.",
+  },
+];
+---
+
+<section id="experience" class="py-12 md:py-20 lg:py-28 text-[var(--white)]">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+      <!-- Title Column -->
+      <div class="md:col-span-3">
+        <h2 class="text-3xl md:text-3xl font-medium italic text-[var(--sec)]">
+          Experience
+        </h2>
+      </div>
+
+      <!-- Experience List -->
+      <div class="md:col-span-9">
+        <div class="flex flex-col">
+          {
+            experiences.map((exp, index) => (
+              <div
+                class={`group py-7 border-b border-[var(--white-icon-tr)] transition-colors duration-300 ${index === 0 ? "pt-0" : ""} ${index === experiences.length - 1 ? "border-b-0" : ""}`}
+              >
+                <div class="flex flex-col gap-2">
+                  <div class="flex justify-between items-start gap-4 max-sm:flex-col-reverse max-sm:gap-1">
+                    <div>
+                      <h3 class="text-base font-semibold text-[var(--white)] transition-colors duration-300">
+                        {exp.role}
+                      </h3>
+                      <span class="text-[0.82rem] text-[var(--sec)] font-medium mt-0.5 block">
+                        {exp.company}
+                      </span>
+                    </div>
+                    <span class="text-xs font-medium text-[var(--white-icon)] tracking-wide whitespace-nowrap pt-0.5 shrink-0">
+                      {exp.period}
+                    </span>
+                  </div>
+                  <p class="text-[0.82rem] leading-relaxed text-[var(--white-icon)]">
+                    {exp.description}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
