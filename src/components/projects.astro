@@ -1,8 +1,7 @@
 ---
 import { Image } from "astro:assets";
-import svgl from "../../public/svgl.png";
-import stockin from "../../public/stockin.png";
-import moviesfordevs from "../../public/moviesfordevs.png";
+import collateral from "../../public/collateral.png";
+import paperlane from "../../public/paperlane.png";
 
 interface Project {
   title: string;
@@ -14,26 +13,26 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "MoviesForDevs",
-    image: moviesfordevs as ImageMetadata,
-    link: "https://github.com/gothsec/MoviesForDevs",
-    preview: "https://movies-for-devs.vercel.app",
-    description: "A curated movie recommendation platform for developers, featuring tech-related films and documentaries with a clean UI.",
+    title: "Social-Collateral",
+    image: collateral as ImageMetadata,
+    link: "https://github.com/SocialCollateralAI",
+    preview: "https://socialcollateral-landingpage.vercel.app/",
+    description: "A social media platform for mental health awareness and support, featuring a clean and modern UI.",
   },
   {
-    title: "StockIn",
-    image: stockin as ImageMetadata,
-    link: "https://github.com/gothsec/stockin-demo",
-    preview: "https://stockin-demo.vercel.app",
+    title: "Paperlane",
+    image: paperlane as ImageMetadata,
+    link: "https://github.com/aanharits/be_post",
+    preview: "https://github.com/aanharits",
     description: "Designed and built an inventory management dashboard for small businesses, focusing on usability and visual clarity.",
   },
-  {
-    title: "Svgl.app",
-    image: svgl as ImageMetadata,
-    link: "https://github.com/pheralb/svgl",
-    preview: "https://svgl.app",
-    description: "An open-source library of popular SVG logos. Contributed to the core components and helped improve the search functionality.",
-  },
+  // {
+  //   title: "Svgl.app",
+  //   image: svgl as ImageMetadata,
+  //   link: "https://github.com/pheralb/svgl",
+  //   preview: "https://svgl.app",
+  //   description: "An open-source library of popular SVG logos. Contributed to the core components and helped improve the search functionality.",
+  // },
 ];
 ---
 
@@ -50,7 +49,7 @@ const projects: Project[] = [
         </h2>
         <a
           target="_blank"
-          href="https://github.com/Gothsec?tab=repositories"
+          href="https://github.com/aanharits"
           class="inline-flex items-center gap-2 text-sm text-[var(--white-icon)] hover:text-[var(--sec)] transition-colors group"
         >
           more
