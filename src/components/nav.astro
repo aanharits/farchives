@@ -2,194 +2,169 @@
 interface NavItem {
   label: string;
   href: string;
-  icon: string;
 }
 
 const navItems: NavItem[] = [
-  {
-    label: "Home",
-    href: "#home",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M21 20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9.48907C3 9.18048 3.14247 8.88917 3.38606 8.69972L11.3861 2.47749C11.7472 2.19663 12.2528 2.19663 12.6139 2.47749L20.6139 8.69972C20.8575 8.88917 21 9.18048 21 9.48907V20ZM19 19V9.97815L12 4.53371L5 9.97815V19H19Z"></path></svg>`,
-  },
-  {
-    label: "About",
-    href: "#about",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path></svg>`,
-  },
-  {
-    label: "Projects",
-    href: "#projects",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 5V19H20V7H11.5858L9.58579 5H4ZM12.4142 5H21C21.5523 5 22 5.44772 22 6V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H10.4142L12.4142 5Z"></path></svg>`,
-  },
-  {
-    label: "Contact",
-    href: "#contact",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M21.7267 2.95694L16.2734 22.0432C16.1225 22.5716 15.7979 22.5956 15.5563 22.1126L11 13L1.9229 9.36919C1.41322 9.16532 1.41953 8.86022 1.95695 8.68108L21.0432 2.31901C21.5716 2.14285 21.8747 2.43866 21.7267 2.95694ZM19.0353 5.09647L6.81221 9.17085L12.4488 11.4255L15.4895 17.5068L19.0353 5.09647Z"></path></svg>`,
-  },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Contact", href: "#contact" },
 ];
 ---
 
-<div class="flex justify-center w-full">
-  <nav
-    id="main-nav"
-    class="fixed left-1/2 -translate-x-1/2 z-[100] bg-[var(--background)] border border-1 border-transparent backdrop-blur-xl transition-all duration-500 ease-in-out md:top-6 md:bottom-auto bottom-0 w-[80%]"
-  >
-    <div class="container mx-auto flex justify-center items-center p-3">
-      <ul
-        class="flex w-full justify-between md:space-x-6 md:justify-center md:gap-12 gap-6"
-      >
-        {
-          navItems.map((item) => (
-            <li class="flex-1 md:flex-none">
-              <a
-                href={item.href}
-                class="flex flex-col items-center gap-1 text-[var(--white-icon)] transition-colors text-xs md:text-base relative group"
-              >
-                <div class="absolute -left-6 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 scale-0 opacity-0 bg-[var(--sec)] nav-indicator hidden md:block" />
-                <span class="md:hidden flex items-center justify-center w-6 h-6">
-                  <fragment set:html={item.icon} />
-                </span>
-                <span class="hidden md:inline-block">{item.label}</span>
-                <span class="md:hidden">{item.label}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </nav>
-</div>
+<!-- Hamburger Toggle Button -->
+<button
+  id="hamburger-btn"
+  class="fixed top-6 right-[88px] z-[120] flex flex-col items-center justify-center gap-[4px] w-[42px] h-[42px] border border-transparent rounded-full bg-[var(--background)] cursor-pointer backdrop-blur-[12px] transition-all duration-300 ease-in-out hover:bg-[var(--component-bg)] hover:border-[#ffffff10] hover:scale-[1.08] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] active:scale-95"
+  aria-label="Toggle navigation menu"
+>
+  <span class="w-[18px] h-[1.5px] bg-[var(--white-icon)] transition-all duration-300 origin-center rounded-full pointer-events-none"></span>
+  <span class="w-[18px] h-[1.5px] bg-[var(--white-icon)] transition-all duration-300 origin-center rounded-full pointer-events-none"></span>
+</button>
+
+<!-- Dropdown Navigation Menu -->
+<nav
+  id="nav-menu"
+  class="fixed top-[80px] right-9 z-[110] w-[200px] border border-[#ffffff10] rounded-[20px] shadow-2xl backdrop-blur-2xl opacity-0 translate-y-[-10px] pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+>
+  <ul class="flex flex-col py-3 px-2">
+    {
+      navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="nav-link flex items-center justify-between px-4 py-3 text-[0.85rem] font-medium text-[var(--white-icon)] rounded-[14px] transition-all duration-300 hover:text-[var(--white)] hover:bg-[var(--white-icon-tr)] hover:border-[#ffffff10] border border-transparent"
+            data-target={item.href.substring(1)}
+          >
+            {item.label}
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--sec)] opacity-0 transition-opacity duration-300 nav-indicator"></span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
 <style>
-  nav {
-    transform: translateX(-50%);
-    background-color: var(--background);
-    transition:
-      background-color 0.3s ease,
-      border-radius 0.3s ease,
-      border-color 0.3s ease;
-  }
-
-  nav.scrolling {
-    background-color: var(--component-bg);
-    border-color: #ffffff10;
-    border-radius: 9999px;
-  }
-
-  nav a.active .nav-indicator {
-    transform: translateY(-50%) scale(1);
-    opacity: 1;
+  #nav-menu {
+    background-color: color-mix(in srgb, var(--component-bg) 85%, transparent);
   }
 
   nav a.active {
-    color: var(--nav-active) !important;
+    color: var(--white) !important;
+    background-color: var(--white-icon-tr);
+    border-color: rgba(255, 255, 255, 0.08);
   }
-
-  @media (max-width: 767px) {
-    nav {
-      width: 100% !important;
-      transform: translateX(-50%);
-      bottom: 0;
-      left: 50%;
-      position: fixed;
-      border-radius: 1rem 1rem 0 0;
-      border-color: #ffffff10;
-    }
-
-    nav.scrolling {
-      border-radius: 1rem 1rem 0 0;
-      background-color: var(--component-bg);
-    }
-
-    body {
-      padding-bottom: 70px;
-    }
+  nav a.active .nav-indicator {
+    opacity: 1;
+  }
+  
+  [data-theme="light"] nav a.active {
+    border-color: rgba(0, 0, 0, 0.05);
+  }
+  [data-theme="light"] #nav-menu {
+    border-color: rgba(0, 0, 0, 0.05);
   }
 </style>
 
 <script>
-  const nav = document.getElementById("main-nav");
-  const maxScroll = 1000;
-  let rafId: number | null = null;
+  const hamburgerBtn = document.getElementById("hamburger-btn");
+  const navMenu = document.getElementById("nav-menu");
+  const spans = hamburgerBtn?.querySelectorAll("span");
+  const navLinks = document.querySelectorAll(".nav-link");
+  
+  let isOpen = false;
 
-  function updateNav() {
-    if (window.scrollY > 0) {
-      nav?.classList.add("scrolling");
-
-      const scrollProgress = Math.min(window.scrollY / maxScroll, 1);
-      const easeProgress = 1 - Math.pow(1 - scrollProgress, 4);
-
-      const minWidth = 528;
-      const maxWidth = window.innerWidth * 0.8;
-      const currentWidth = maxWidth - (maxWidth - minWidth) * easeProgress;
-
-      if (window.innerWidth >= 768) {
-        nav?.style.setProperty("width", `${currentWidth}px`);
+  function toggleMenu() {
+    isOpen = !isOpen;
+    if (isOpen) {
+      navMenu?.classList.remove("opacity-0", "translate-y-[-10px]", "pointer-events-none");
+      navMenu?.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+      
+      if (spans && spans.length >= 2) {
+        spans[0].style.transform = "translateY(2.75px) rotate(45deg)";
+        spans[1].style.transform = "translateY(-2.75px) rotate(-45deg)";
       }
     } else {
-      nav?.classList.remove("scrolling");
-      nav?.style.setProperty("width", "80%");
+      navMenu?.classList.add("opacity-0", "translate-y-[-10px]", "pointer-events-none");
+      navMenu?.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+      
+      if (spans && spans.length >= 2) {
+        spans[0].style.transform = "none";
+        spans[1].style.transform = "none";
+      }
     }
-    rafId = null;
   }
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!rafId) {
-        rafId = requestAnimationFrame(updateNav);
-      }
-    },
-    { passive: true },
-  );
+  hamburgerBtn?.addEventListener("click", toggleMenu);
 
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
+  document.addEventListener("click", (e) => {
+    if (isOpen && navMenu && hamburgerBtn && !navMenu.contains(e.target as Node) && !hamburgerBtn.contains(e.target as Node)) {
+      toggleMenu();
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
-      const target = e.currentTarget as HTMLAnchorElement;
-      const targetId = target.getAttribute("href")?.substring(1) || "";
+      const targetId = link.getAttribute("href")?.substring(1) || "";
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: "smooth",
-        });
+        targetElement.scrollIntoView({ behavior: "smooth" });
+        toggleMenu(); // Close menu
       }
     });
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll("nav a[href^='#']");
-    const observerOptions = { threshold: 0.6 };
+  // Scroll styling match theme toggle
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      hamburgerBtn?.classList.add("!bg-[var(--component-bg)]", "!border-[#ffffff10]");
+    } else {
+      hamburgerBtn?.classList.remove("!bg-[var(--component-bg)]", "!border-[#ffffff10]");
+    }
+  }, { passive: true });
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove("active"));
-          const id = entry.target.getAttribute("id");
-          const activeLink = document.querySelector(`nav a[href="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add("active");
-          }
-        }
-      });
+  // Intersection Observer for Active Links
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select specific section targets based on nav links
+    const targetSelectors = Array.from(navLinks).map(link => `#${link.getAttribute("data-target")}`).filter(Boolean).join(", ");
+    const sections = document.querySelectorAll(targetSelectors);
+    
+    // Using a reliable threshold and looking at intersecting blocks
+    const observerOptions = { 
+      root: null,
+      threshold: [0.1, 0.4, 0.6, 0.8], 
+      rootMargin: "-15% 0px -15% 0px" 
     };
 
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
+    let activeSectionId = "";
+    let maxIntersectionRatio = 0;
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      let changed = false;
+      
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > maxIntersectionRatio) {
+          activeSectionId = entry.target.getAttribute("id") || "";
+          maxIntersectionRatio = entry.intersectionRatio;
+          changed = true;
+        } else if (!entry.isIntersecting && entry.target.getAttribute("id") === activeSectionId) {
+          maxIntersectionRatio = 0; // Reset if current active section leaves
+        }
+      });
+
+      if (changed && activeSectionId) {
+        navLinks.forEach((link) => link.classList.remove("active"));
+        const activeLink = document.querySelector(`.nav-link[data-target="${activeSectionId}"]`);
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
     sections.forEach((section) => observer.observe(section));
   });
 </script>
-
-<style>
-  @media (max-width: 767px) {
-    body {
-      padding-bottom: 70px;
-    }
-  }
-
-  nav a.active {
-    color: var(--nav-active) !important;
-  }
-</style>
