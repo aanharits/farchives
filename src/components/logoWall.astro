@@ -25,7 +25,7 @@ const technologies = [
   </div>
 
   <div
-    class="flex justify-center animate-scroll hover:animate-paused gap-10 md:gap-20 w-max mx-auto"
+    class="flex justify-center animate-scroll hover:animate-paused gap-6 md:gap-12 w-max mx-auto"
   >
     {
       [...technologies, ...technologies, ...technologies].map((tech) => (
@@ -33,12 +33,12 @@ const technologies = [
           <img
             src={`/svg/${tech}.svg`}
             alt={tech}
-            class="h-7 w-auto object-contain transition-transform group-hover:scale-110 opacity-60"
-            width="30"
-            height="30"
+            class="h-5 w-auto object-contain transition-transform group-hover:scale-110 opacity-60"
+            width="20"
+            height="20"
             loading="lazy"
           />
-          <span class="text-lg font-medium text-[var(--white-icon)]">
+          <span class="text-sm font-medium text-[var(--white-icon)]">
             {tech.charAt(0).toUpperCase() + tech.slice(1)}
           </span>
         </div>
