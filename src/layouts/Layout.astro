@@ -84,29 +84,14 @@ const { title } = Astro.props;
     color: var(--background);
   }
 
-  /* Scrollbar styles */
-
+  /* Hide scrollbar for Chrome, Safari and Opera */
   ::-webkit-scrollbar {
-    width: 15px;
+    display: none;
   }
 
-  ::-webkit-scrollbar-track {
-    background: var(--container);
-    border-radius: 30px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--background);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--pink);
-  }
-
-  /* Scrollbar styles for Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
   * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--line) var(--container);
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 </style>
