@@ -44,7 +44,7 @@ const projects: Project[] = [
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
       
       <!-- Title Column -->
-      <div class="md:col-span-3">
+      <div class="md:col-span-3" data-proj-title>
         <h2 class="text-2xl md:text-3xl font-medium italic text-[var(--sec)] mb-4">
           Projects
         </h2>
@@ -73,6 +73,7 @@ const projects: Project[] = [
                 target="_blank"
                 rel="noopener noreferrer"
                 class="project-card group block min-w-[280px] flex-[0_0_calc(33.333%-1rem)] lg:flex-[0_0_calc(33.333%-1rem)] md:flex-[0_0_calc(50%-0.75rem)] max-sm:flex-[0_0_85%] snap-start select-none no-underline"
+                data-proj-card
               >
                 <div class="border border-[var(--white-icon-tr)] shadow-md rounded-[14px] overflow-hidden transition-all duration-300 h-full flex flex-col hover:-translate-y-0.5 group-hover:border-[var(--sec)] group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
                   <!-- Project Image -->
@@ -152,58 +153,100 @@ const projects: Project[] = [
 </style>
 
 <script>
-  const carousel = document.getElementById("projects-carousel");
-  const dots = document.querySelectorAll(".carousel-dot");
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- GSAP Animations ---
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
 
-  if (carousel && dots.length > 0) {
-    // Update active dot on scroll
-    carousel.addEventListener("scroll", () => {
-      const scrollLeft = carousel.scrollLeft;
-      const cardWidth = carousel.querySelector(".project-card")?.clientWidth || 280;
-      const gap = 24; // 1.5rem
-      const activeIndex = Math.round(scrollLeft / (cardWidth + gap));
+    if (gsap && ScrollTrigger) {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isMobile = window.innerWidth < 768;
+      const dur = prefersReduced ? 0.01 : 0.6;
 
-      dots.forEach((dot, i) => {
-        if (i === activeIndex) {
-          dot.classList.add("w-5", "!bg-[var(--sec)]");
-          dot.classList.remove("w-2");
-        } else {
-          dot.classList.remove("w-5", "!bg-[var(--sec)]");
-          dot.classList.add("w-2");
-        }
+      // Title slide from left
+      gsap.from("[data-proj-title]", {
+        x: isMobile ? -20 : -40,
+        opacity: 0,
+        duration: dur,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#projects",
+          start: isMobile ? "top 85%" : "top 75%",
+          toggleActions: "play none none none",
+        },
       });
-    }, { passive: true });
 
-    // Click dot to scroll
-    dots.forEach((dot) => {
-      dot.addEventListener("click", () => {
-        const index = Number(dot.getAttribute("data-index"));
+      // Project cards staggered
+      gsap.from("[data-proj-card]", {
+        y: isMobile ? 25 : 40,
+        opacity: 0,
+        duration: dur * 1.1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#projects",
+          start: isMobile ? "top 80%" : "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+    }
+
+    // --- Carousel Logic ---
+    const carousel = document.getElementById("projects-carousel");
+    const dots = document.querySelectorAll(".carousel-dot");
+
+    if (carousel && dots.length > 0) {
+      // Update active dot on scroll
+      carousel.addEventListener("scroll", () => {
+        const scrollLeft = carousel.scrollLeft;
         const cardWidth = carousel.querySelector(".project-card")?.clientWidth || 280;
-        const gap = 24;
-        carousel.scrollTo({ left: index * (cardWidth + gap), behavior: "smooth" });
+        const gap = 24; // 1.5rem
+        const activeIndex = Math.round(scrollLeft / (cardWidth + gap));
+
+        dots.forEach((dot, i) => {
+          if (i === activeIndex) {
+            dot.classList.add("w-5", "!bg-[var(--sec)]");
+            dot.classList.remove("w-2");
+          } else {
+            dot.classList.remove("w-5", "!bg-[var(--sec)]");
+            dot.classList.add("w-2");
+          }
+        });
+      }, { passive: true });
+
+      // Click dot to scroll
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const index = Number(dot.getAttribute("data-index"));
+          const cardWidth = carousel.querySelector(".project-card")?.clientWidth || 280;
+          const gap = 24;
+          carousel.scrollTo({ left: index * (cardWidth + gap), behavior: "smooth" });
+        });
       });
-    });
 
-    // Drag to scroll
-    let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
+      // Drag to scroll
+      let isDown = false;
+      let startX: number;
+      let scrollLeft: number;
 
-    carousel.addEventListener("mousedown", (e) => {
-      isDown = true;
-      startX = e.pageX - carousel.offsetLeft;
-      scrollLeft = carousel.scrollLeft;
-    });
+      carousel.addEventListener("mousedown", (e) => {
+        isDown = true;
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+      });
 
-    carousel.addEventListener("mouseleave", () => { isDown = false; });
-    carousel.addEventListener("mouseup", () => { isDown = false; });
+      carousel.addEventListener("mouseleave", () => { isDown = false; });
+      carousel.addEventListener("mouseup", () => { isDown = false; });
 
-    carousel.addEventListener("mousemove", (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      carousel.scrollLeft = scrollLeft - walk;
-    });
-  }
+      carousel.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        carousel.scrollLeft = scrollLeft - walk;
+      });
+    }
+  });
 </script>
