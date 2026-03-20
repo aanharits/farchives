@@ -8,6 +8,7 @@ import profileImg from "../../public/profile.png";
   <!-- Background Typography Decoration -->
   <div
     class="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]"
+    data-hero-bg
   >
     <span
       class="text-[12rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem] xl:text-[30rem] font-serif italic text-[var(--white)] whitespace-nowrap"
@@ -26,12 +27,13 @@ import profileImg from "../../public/profile.png";
         <!-- First Name -->
         <h1
           class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif italic text-[var(--sec)]"
+          data-hero-name-left
         >
           Farhan
         </h1>
 
         <!-- Profile Photo with Star -->
-        <div class="relative">
+        <div class="relative" data-hero-photo>
           <div
             class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[var(--white-icon-tr)] shadow-2xl"
           >
@@ -52,6 +54,7 @@ import profileImg from "../../public/profile.png";
         <!-- Last Name -->
         <h1
           class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif italic text-[var(--sec)]"
+          data-hero-name-right
         >
           Harits
         </h1>
@@ -59,10 +62,12 @@ import profileImg from "../../public/profile.png";
       <!-- Description -->
       <p
         class="text-base text-sm md:text-lg lg:text-xl text-[var(--white-icon)] max-w-2xl leading-relaxed"
+        data-hero-desc
       >
-        <span class="text-[var(--sec)] shiny-sec"> Full-stack explorer and CompSci undergrad.
-        </span> Dedicated to crafting seamless digital experiences and learning
-        new technologies along the way.
+        <span class="text-[var(--sec)] shiny-sec">
+          Full-stack explorer and CompSci undergrad.
+        </span> Dedicated to crafting seamless digital experiences and learning new
+        technologies along the way.
       </p>
 
       <!-- Download CV Button -->
@@ -70,6 +75,7 @@ import profileImg from "../../public/profile.png";
         href="/cv.pdf"
         download
         class="inline-flex items-center gap-2 px-4 py-2 mt-2 text-sm font-medium text-[var(--background)] bg-[var(--white)] rounded-full hover:bg-[var(--sec)] hover:text-[var(--white)] transition-all duration-300 group"
+        data-hero-cta
       >
         Download CV
       </a>
@@ -78,7 +84,7 @@ import profileImg from "../../public/profile.png";
 </section>
 
 <!-- Logo Wall - Tech Stack -->
-<div class="pb-16 md:pb-24">
+<div class="pb-16 md:pb-24" data-logo-wall>
   <LogoWall />
 </div>
 
@@ -102,3 +108,75 @@ import profileImg from "../../public/profile.png";
     }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+
+    if (!gsap || !ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Set initial states
+    gsap.set("[data-hero-name-left]", { opacity: 0, x: isMobile ? -30 : -60 });
+    gsap.set("[data-hero-name-right]", { opacity: 0, x: isMobile ? 30 : 60 });
+    gsap.set("[data-hero-photo]", { opacity: 0, scale: 0.7 });
+    gsap.set("[data-hero-desc]", { opacity: 0, y: isMobile ? 20 : 30 });
+    gsap.set("[data-hero-cta]", { opacity: 0, y: 15 });
+    gsap.set("[data-logo-wall]", { opacity: 0, y: 20 });
+
+    const dur = prefersReduced ? 0.01 : isMobile ? 0.6 : 0.8;
+    const ease = "power3.out";
+
+    // Hero entrance timeline
+    const tl = gsap.timeline({ delay: prefersReduced ? 0 : 0.3 });
+
+    tl.to("[data-hero-name-left]", { opacity: 1, x: 0, duration: dur, ease })
+      .to(
+        "[data-hero-name-right]",
+        { opacity: 1, x: 0, duration: dur, ease },
+        "<0.1",
+      )
+      .to(
+        "[data-hero-photo]",
+        { opacity: 1, scale: 1, duration: dur * 1.1, ease: "back.out(1.4)" },
+        "<0.15",
+      )
+      .to(
+        "[data-hero-desc]",
+        { opacity: 1, y: 0, duration: dur * 0.9, ease },
+        "-=0.3",
+      )
+      .to(
+        "[data-hero-cta]",
+        { opacity: 1, y: 0, duration: dur * 0.8, ease },
+        "-=0.2",
+      )
+      .to(
+        "[data-logo-wall]",
+        { opacity: 1, y: 0, duration: dur * 0.8, ease },
+        "-=0.15",
+      );
+
+    // Background text parallax
+    if (!prefersReduced) {
+      gsap.to("[data-hero-bg]", {
+        yPercent: isMobile ? 15 : 30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#home",
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }
+  });
+</script>
