@@ -10,6 +10,7 @@
         <!-- Circle - Positioned left -->
         <div
           class="absolute -left-12 sm:-left-16 top-0 w-52 sm:w-64 h-52 sm:h-64 rounded-full bg-[var(--sec)]"
+          data-contact-circle
         >
         </div>
 
@@ -18,12 +19,13 @@
           <!-- Title -->
           <h2
             class="text-5xl sm:text-5xl font-serif italic text-[var(--white)] leading-[0.9] mb-8 sm:mb-8"
+            data-contact-title
           >
             Let's<br />Connect
           </h2>
 
           <!-- Description -->
-          <p class="text-sm text-[var(--white-icon)] leading-relaxed mb-8">
+          <p class="text-sm text-[var(--white-icon)] leading-relaxed mb-8" data-contact-content>
             I'm remote-friendly and always open to new opportunities. Feel free
             to email me at <a
               href="mailto:farhan.harits05@gmail.com"
@@ -44,7 +46,7 @@
           </p>
 
           <!-- Spotify Section -->
-          <div class="mt-8">
+          <div class="mt-8" data-contact-content>
             <p class="text-sm text-[var(--white-icon)] mb-4">
               Let's be <a
                 href="https://open.spotify.com/user/312467646"
@@ -71,11 +73,12 @@
         <!-- Decorative Circle -->
         <div
           class="absolute left-0 md:left-4 top-0 w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] rounded-full bg-[var(--sec)]"
+          data-contact-circle-desktop
         >
         </div>
 
         <!-- Let's Connect Title -->
-        <div class="absolute left-8 md:left-12 lg:left-24 bottom-8 z-10">
+        <div class="absolute left-8 md:left-12 lg:left-24 bottom-8 z-10" data-contact-title-desktop>
           <h2
             class="text-6xl lg:text-8xl font-serif italic text-[var(--white)] leading-[0.9]"
           >
@@ -86,6 +89,7 @@
         <!-- Description & Spotify - Right side -->
         <div
           class="absolute right-0 top-1/2 -translate-y-1/2 w-[55%] md:w-[50%] lg:w-[45%]"
+          data-contact-content-desktop
         >
           <p
             class="text-base lg:text-lg text-[var(--white-icon)] leading-relaxed mb-6"
@@ -134,25 +138,115 @@
 </section>
 
 <script>
-  // Lazy-load Spotify iframes when they come into view
-  const spotifyFrames = document.querySelectorAll("iframe.spotify-lazy");
-  if (spotifyFrames.length > 0) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const iframe = entry.target as HTMLIFrameElement;
-            const src = iframe.getAttribute("data-src");
-            if (src && !iframe.src) {
-              iframe.src = src;
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- Lazy-load Spotify iframes ---
+    const spotifyFrames = document.querySelectorAll("iframe.spotify-lazy");
+    if (spotifyFrames.length > 0) {
+      const lazyObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const iframe = entry.target as HTMLIFrameElement;
+              const src = iframe.getAttribute("data-src");
+              if (src && !iframe.src) {
+                iframe.src = src;
+              }
+              lazyObserver.unobserve(iframe);
             }
-            observer.unobserve(iframe);
-          }
-        });
-      },
-      { rootMargin: "200px" },
-    );
+          });
+        },
+        { rootMargin: "200px" },
+      );
 
-    spotifyFrames.forEach((frame) => observer.observe(frame));
-  }
+      spotifyFrames.forEach((frame) => lazyObserver.observe(frame));
+    }
+
+    // --- GSAP Animations ---
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
+    const dur = prefersReduced ? 0.01 : 0.8;
+
+    if (isMobile) {
+      // Mobile animations
+      gsap.from("[data-contact-circle]", {
+        scale: 0,
+        opacity: 0,
+        duration: dur * 1.2,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      gsap.from("[data-contact-title]", {
+        x: -30,
+        opacity: 0,
+        duration: dur,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      gsap.from("[data-contact-content]", {
+        y: 25,
+        opacity: 0,
+        duration: dur * 0.9,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+    } else {
+      // Desktop animations
+      gsap.from("[data-contact-circle-desktop]", {
+        scale: 0,
+        opacity: 0,
+        duration: dur * 1.3,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      gsap.from("[data-contact-title-desktop]", {
+        x: -50,
+        opacity: 0,
+        duration: dur,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      gsap.from("[data-contact-content-desktop]", {
+        x: 50,
+        opacity: 0,
+        duration: dur,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 65%",
+          toggleActions: "play none none none",
+        },
+      });
+    }
+  });
 </script>
