@@ -35,7 +35,7 @@ const experiences: Experience[] = [
   <div class="max-w-5xl mx-auto px-4">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
       <!-- Title Column -->
-      <div class="md:col-span-3">
+      <div class="md:col-span-3" data-exp-title>
         <h2 class="text-2xl md:text-3xl font-medium italic text-[var(--sec)]">
           Experience
         </h2>
@@ -48,6 +48,7 @@ const experiences: Experience[] = [
             experiences.map((exp, index) => (
               <div
                 class={`group py-7 border-b border-[var(--white-icon-tr)] transition-colors duration-300 ${index === 0 ? "pt-0" : ""} ${index === experiences.length - 1 ? "border-b-0" : ""}`}
+                data-exp-item
               >
                 <div class="flex flex-col gap-2">
                   <div class="flex justify-between items-start gap-4 max-sm:flex-col-reverse max-sm:gap-1">
@@ -75,3 +76,46 @@ const experiences: Experience[] = [
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+    const dur = prefersReduced ? 0.01 : 0.6;
+
+    // Title slide from left
+    gsap.from("[data-exp-title]", {
+      x: isMobile ? -20 : -40,
+      opacity: 0,
+      duration: dur,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#experience",
+        start: isMobile ? "top 85%" : "top 75%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Experience items staggered
+    gsap.from("[data-exp-item]", {
+      y: isMobile ? 20 : 30,
+      opacity: 0,
+      duration: dur,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#experience",
+        start: isMobile ? "top 80%" : "top 70%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>
