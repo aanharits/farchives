@@ -2,7 +2,7 @@
 
 ---
 
-<footer class="w-full py-1 pb-10 md:pb-12 border-t border-[#ffffff10]">
+<footer class="w-full py-1 pb-10 md:pb-12 border-t border-[#ffffff10]" data-footer>
   <div class="max-w-5xl mx-auto px-4">
     <div class="pt-4">
       <p class="text-center text-sm text-[var(--white-icon)] space-y-2">
@@ -17,3 +17,27 @@
     </div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.from("[data-footer]", {
+      opacity: 0,
+      y: 15,
+      duration: prefersReduced ? 0.01 : 0.5,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "[data-footer]",
+        start: "top 95%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>
