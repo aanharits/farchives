@@ -7,18 +7,19 @@
     <!-- About Content - 3 Column Layout -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
       <!-- Title Column -->
-      <div class="md:col-span-3">
+      <div class="md:col-span-3" data-about-title>
         <h2 class="text-2xl md:text-3xl font-medium italic text-[var(--sec)]">
           About me
         </h2>
       </div>
 
       <!-- First Text Column -->
-      <div class="md:col-span-4">
+      <div class="md:col-span-4" data-about-text>
         <p
           class="text-[var(--white-icon)] leading-relaxed text-sm md:text-base"
         >
-          I'm a <span class="text-[var(--white)]"> Undergraduate Computer Science student (Sem 5)</span
+          I'm a <span class="text-[var(--white)]">
+            Undergraduate Computer Science student (Sem 5)</span
           > who loves crafting clean, modern, and user-friendly digital experiences.
           I care deeply about layout, typography, and interaction — and I always aim
           for that sweet spot between form and function. I've worked with startups
@@ -28,7 +29,7 @@
       </div>
 
       <!-- Second Text Column -->
-      <div class="md:col-span-5">
+      <div class="md:col-span-5" data-about-text>
         <p
           class="text-[var(--white-icon)] leading-relaxed text-sm md:text-base"
         >
@@ -43,3 +44,46 @@
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+    const dur = prefersReduced ? 0.01 : 0.7;
+
+    // Title slide from left
+    gsap.from("[data-about-title]", {
+      x: isMobile ? -20 : -40,
+      opacity: 0,
+      duration: dur,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#about",
+        start: isMobile ? "top 85%" : "top 75%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Text columns staggered fade up
+    gsap.from("[data-about-text]", {
+      y: isMobile ? 20 : 35,
+      opacity: 0,
+      duration: dur,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#about",
+        start: isMobile ? "top 80%" : "top 70%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>
