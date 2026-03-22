@@ -25,7 +25,10 @@
           </h2>
 
           <!-- Description -->
-          <p class="text-sm text-[var(--white-icon)] leading-relaxed mb-8" data-contact-content>
+          <p
+            class="text-sm text-[var(--white-icon)] leading-relaxed mb-8"
+            data-contact-content
+          >
             I'm remote-friendly and always open to new opportunities. Feel free
             to email me at <a
               href="mailto:farhan.harits05@gmail.com"
@@ -56,12 +59,16 @@
               > moots! Check out what I'm listening to:
             </p>
             <iframe
-              style="border-radius:12px; border:0;"
-              data-src="https://open.spotify.com/embed/playlist/1RcRLy8m5KfmMgKau6MFb6?si=44fa5dff03eb4e2c&utm_source=generator&locale=en_US"
-              class="w-full h-[200px] text-sm spotify-lazy"
+              data-testid="embed-iframe"
+              style="border-radius:12px"
+              src="https://open.spotify.com/embed/playlist/5YRcKyMlyTFGZnW8SomGHH?utm_source=generator"
+              width="100%"
+              height="152"
               allowfullscreen=""
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"></iframe>
+              loading="lazy"
+            >
+            </iframe>
           </div>
         </div>
       </div>
@@ -78,7 +85,10 @@
         </div>
 
         <!-- Let's Connect Title -->
-        <div class="absolute left-8 md:left-12 lg:left-24 bottom-8 z-10" data-contact-title-desktop>
+        <div
+          class="absolute left-8 md:left-12 lg:left-24 bottom-8 z-10"
+          data-contact-title-desktop
+        >
           <h2
             class="text-6xl lg:text-8xl font-serif italic text-[var(--white)] leading-[0.9]"
           >
@@ -124,12 +134,16 @@
               > moots! Check out what I'm listening to:
             </p>
             <iframe
-              style="border-radius:12px; border:0;"
-              data-src="https://open.spotify.com/embed/playlist/1RcRLy8m5KfmMgKau6MFb6?si=44fa5dff03eb4e2c&utm_source=generator&locale=en_US"
-              class="w-full h-[200px] text-lg spotify-lazy"
+              data-testid="embed-iframe"
+              style="border-radius:12px"
+              src="https://open.spotify.com/embed/playlist/5YRcKyMlyTFGZnW8SomGHH?utm_source=generator"
+              width="100%"
+              height="152"
               allowfullscreen=""
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"></iframe>
+              loading="lazy"
+            >
+            </iframe>
           </div>
         </div>
       </div>
@@ -168,7 +182,9 @@
     const ScrollTrigger = window.ScrollTrigger;
     if (!gsap || !ScrollTrigger) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     const isMobile = window.innerWidth < 768;
     const dur = prefersReduced ? 0.01 : 0.8;
 
