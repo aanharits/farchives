@@ -3,30 +3,38 @@ interface Experience {
   role: string;
   company: string;
   period: string;
+  location: string;
+  type: "Remote" | "Onsite" | "Hybrid";
   description: string;
 }
 
 const experiences: Experience[] = [
   {
-    role: "Member",
-    company: "GDGOC Universitas Gunadarma",
-    period: "November 2023 — Present",
+    role: "Full-Stack Developer",
+    company: "Coding Camp DBS Foundation",
+    period: "Feb 2026 — Jul 2026",
+    location: "Indonesia",
+    type: "Remote",
     description:
-      "Participating in GDGOC Universitas Gunadarma events, contributing to open-source projects, and learning new technologies.",
+      "Completed an intensive full-stack web development & applied AI/ML program. Built Emigria, a fraud-detection capstone platform. handling the UI, backend, and integrating the team's ML model into a pipeline backed by a Neon (PostgreSQL) database.",
   },
   {
     role: "Top 15 Finalist",
-    company: "Amartha x GDG Jakarta Hackaton",
-    period: "November 2025",
+    company: "Amartha x GDG Jakarta Hackathon",
+    period: "Nov 2025",
+    location: "Jakarta, ID",
+    type: "Onsite",
     description:
-      "Achieved a Top 15 finalist position among 140+ diverse teams, including university faculty, industry professionals, and entrepreneurs.",
+      "Contributed as Graph Visualization Specialist on a 5-person team that built SocialCollateral AI is a social graph engine for inclusive microfinance lending. Reached Top 15 among 140+ competing teams.",
   },
   {
-    role: "Full-stack Developer",
-    company: "Coding Camp DBS Foundation",
-    period: "February 2026 - Present",
+    role: "Member",
+    company: "GDGOC Universitas Gunadarma",
+    period: "Nov 2023 — Present",
+    location: "Depok, ID",
+    type: "Hybrid",
     description:
-      "Developing a web application for the DBS Foundation, including user authentication, data management, and reporting features.",
+      "Active member of the Google Developer Groups on Campus chapter at Universitas Gunadarma. Participating in tech events, study jams, and collaborative sessions around Google technologies and open-source.",
   },
 ];
 ---
@@ -50,19 +58,27 @@ const experiences: Experience[] = [
                 class={`group py-7 border-b border-[var(--white-icon-tr)] transition-colors duration-300 ${index === 0 ? "pt-0" : ""} ${index === experiences.length - 1 ? "border-b-0" : ""}`}
                 data-exp-item
               >
-                <div class="flex flex-col gap-2">
-                  <div class="flex justify-between items-start gap-4 max-sm:flex-col max-sm:gap-1">
-                    <div>
+                <div class="flex flex-col gap-3">
+                  <div class="flex justify-between items-start gap-4 max-sm:flex-col max-sm:gap-1.5">
+                    <div class="flex flex-col gap-1">
                       <h3 class="text-base font-semibold text-[var(--white)] transition duration-300">
                         {exp.role}
                       </h3>
-                      <span class="text-[0.82rem] text-[var(--sec)] font-medium mt-0.5 block">
-                        {exp.company} 
+                      <span class="text-[0.82rem] text-[var(--sec)] font-medium block">
+                        {exp.company}
                       </span>
                     </div>
-                    <span class="text-xs font-medium text-[var(--white-icon)] tracking-wide whitespace-nowrap pt-0.5 shrink-0">
-                      {exp.period}
-                    </span>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0 max-sm:items-start">
+                      <span class="text-xs font-medium text-[var(--white-icon)] tracking-wide whitespace-nowrap">
+                        {exp.period}
+                      </span>
+                      <span
+                        class={`exp-badge exp-badge--${exp.type.toLowerCase()}`}
+                      >
+                        <span class="exp-badge__dot" />
+                        {exp.location} &middot; {exp.type}
+                      </span>
+                    </div>
                   </div>
                   <p class="text-[0.82rem] leading-relaxed text-[var(--white-icon)]">
                     {exp.description}
@@ -76,6 +92,64 @@ const experiences: Experience[] = [
     </div>
   </div>
 </section>
+
+<style is:global>
+  /* ── Badge base ── */
+  .exp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .exp-badge__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Dark mode (default) ── */
+  .exp-badge--remote { color: rgba(147, 197, 253, 0.75); }
+  .exp-badge--remote .exp-badge__dot {
+    background: rgb(96, 165, 250);
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.55);
+  }
+
+  .exp-badge--onsite { color: rgba(252, 211, 77, 0.75); }
+  .exp-badge--onsite .exp-badge__dot {
+    background: rgb(251, 191, 36);
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.55);
+  }
+
+  .exp-badge--hybrid { color: rgba(196, 181, 253, 0.75); }
+  .exp-badge--hybrid .exp-badge__dot {
+    background: rgb(167, 139, 250);
+    box-shadow: 0 0 5px rgba(167, 139, 250, 0.55);
+  }
+
+  /* ── Light mode ── darker for contrast on cream #f0e9d4 */
+  [data-theme="light"] .exp-badge--remote { color: #1e3a8a; }
+  [data-theme="light"] .exp-badge--remote .exp-badge__dot {
+    background: #1d4ed8;
+    box-shadow: none;
+  }
+
+  [data-theme="light"] .exp-badge--onsite { color: #78350f; }
+  [data-theme="light"] .exp-badge--onsite .exp-badge__dot {
+    background: #b45309;
+    box-shadow: none;
+  }
+
+  [data-theme="light"] .exp-badge--hybrid { color: #4c1d95; }
+  [data-theme="light"] .exp-badge--hybrid .exp-badge__dot {
+    background: #6d28d9;
+    box-shadow: none;
+  }
+</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
