@@ -3,21 +3,13 @@
 ---
 
 <footer
-  class="w-full py-1 pb-10 md:pb-12 border-t border-[#ffffff10]"
+  class="w-full py-3 bg-[--background] relative z-10"
   data-footer
 >
-  <div class="max-w-5xl mx-auto px-4">
-    <div class="pt-4">
-      <p class="text-center text-sm text-[var(--white-icon)] space-y-2">
-        <!-- If you are using this template, by MIT License you can't remove the copyright notice -->
-        <span class="block sm:inline"
-          >built by <span class="text-[var(--sec)] shiny-sec"
-            ><a href="https://github.com/aanharits">aanharits</a></span
-          >
-          .</span
-        >
-      </p>
-    </div>
+  <div class="max-w-5xl mx-auto px-9 sm:px-28 lg:px-20 text-center">
+    <p class="text-xs md:text-sm text-[var(--white-icon)] tracking-wider opacity-70">
+      built by <a href="https://github.com/aanharits" class="text-[var(--white)] hover:text-[var(--sec)] transition-colors font-medium">aanharits</a>.
+    </p>
   </div>
 </footer>
 
@@ -35,7 +27,7 @@
 
     gsap.from("[data-footer]", {
       opacity: 0,
-      y: 15,
+      y: 10,
       duration: prefersReduced ? 0.01 : 0.5,
       ease: "power2.out",
       scrollTrigger: {
