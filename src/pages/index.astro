@@ -10,13 +10,116 @@ import Contact from "@/components/contact.astro";
 import Footer from "@/components/footer.astro";
 ---
 
-<Layout title="farchive">
-  <ThemeToggle />
-  <Nav />
-  <Home />
-  <About />
-  <Experience />
-  <Projects />
-  <Contact />
-  <Footer />
+<Layout title="farchives.">
+  <!-- Global Nav Overlay to prevent GSAP pins from covering fixed navigation -->
+  <div class="fixed top-0 left-0 w-full h-0 pointer-events-none z-[999999]">
+    <div class="pointer-events-auto">
+      <ThemeToggle />
+      <Nav />
+    </div>
+  </div>
+
+  <div id="velocity-container" class="relative w-full">
+    <!-- Home -->
+    <div class="section-pin-wrapper scroll-stack-section relative z-[1] w-full">
+      <div
+        class="section-card w-full min-h-screen flex flex-col justify-center origin-top bg-[--background] px-9 sm:px-28 lg:px-20 overflow-hidden"
+      >
+        <Home />
+      </div>
+    </div>
+
+    <!-- About: self-manages sticky pin + word-reveal, no outer card needed -->
+    <div class="scroll-stack-section relative z-[2] w-full">
+      <About />
+    </div>
+
+    <!-- Experience: plain scroll, no pin/overlap -->
+    <div class="scroll-stack-section relative z-[3] w-full">
+      <div
+        class="section-card w-full flex flex-col justify-center origin-top bg-[--background] pt-[20px] px-9 sm:px-28 lg:px-20 overflow-hidden"
+      >
+        <Experience />
+      </div>
+    </div>
+
+    <!-- Projects: pinned so Contact overlaps it on scroll -->
+    <div class="section-pin-wrapper scroll-stack-section relative z-[4] w-full">
+      <div
+        class="section-card alt-section w-full flex flex-col origin-top bg-[--background] pt-[20px] px-9 sm:px-28 lg:px-20 overflow-visible"
+      >
+        <Projects />
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section-pin-wrapper scroll-stack-section relative z-[5] w-full">
+      <div
+        class="section-card w-full min-h-screen flex flex-col justify-between origin-top bg-[--background] rounded-t-[35px] border-t border-[var(--white-icon-tr)] shadow-[0_-25px_50px_rgba(0,0,0,0.5)] pt-[40px] pb-[20px] px-9 sm:px-28 lg:px-20 overflow-hidden"
+      >
+        <div class="flex-1 flex flex-col justify-center w-full">
+          <Contact />
+        </div>
+        <Footer />
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .section-card {
+    will-change: transform, opacity;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+
+    if (!gsap || !ScrollTrigger) return;
+
+    // Advanced 3D Stack / Velocity Scroll Effect
+
+    // 1. Pinning Logic (only for simple wrappers that need JS pinning)
+    const pinWrappers = gsap.utils.toArray(".section-pin-wrapper");
+    pinWrappers.forEach((wrapper) => {
+      ScrollTrigger.create({
+        trigger: wrapper,
+        start: () =>
+          wrapper.offsetHeight > window.innerHeight
+            ? "bottom bottom"
+            : "top top",
+        pin: true,
+        pinSpacing: false,
+        invalidateOnRefresh: true,
+      });
+    });
+
+    // 2. Blur / Dim Logic (for all stacked sections)
+    const stackSections = gsap.utils.toArray(".scroll-stack-section");
+    stackSections.forEach((section, i) => {
+      // Find the card inside, whether it's a generic section-card or the specific about-sticky-card
+      const card = section.querySelector(".section-card, .about-sticky-card");
+      
+      if (i < stackSections.length - 1 && card) {
+        const nextSection = stackSections[i + 1];
+
+        gsap.to(card, {
+          opacity: 0.15,
+          filter: "blur(20px)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: nextSection,
+            start: "top 60%", // Blur starts late, when next section covers bottom 40%
+            end: "top top", // Finishes when fully covered
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+    });
+  });
+</script>
