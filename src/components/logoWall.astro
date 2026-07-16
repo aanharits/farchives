@@ -1,68 +1,202 @@
 ---
 const technologies = [
-  "astro",
-  "react",
-  "typeScript",
-  "tailwindcss",
-  "next",
-  "nodejs",
-  "javaScript",
-  "git",
-  "supabase",
-  "mysql",
-  "bash",
+  { key: "astro", label: "Astro" },
+  { key: "react", label: "React" },
+  { key: "typeScript", label: "TypeScript" },
+  { key: "tailwindcss", label: "Tailwind CSS" },
+  { key: "next", label: "Next.js" },
+  { key: "nodejs", label: "Node.js" },
+  { key: "javaScript", label: "JavaScript" },
+  { key: "git", label: "Git" },
+  { key: "supabase", label: "Supabase" },
+  { key: "mysql", label: "MySQL" },
+  { key: "bash", label: "Bash" },
 ];
+
+// Duplicate 3× for seamless loop
+const looped = [...technologies, ...technologies, ...technologies];
 ---
 
-<div class="relative overflow-x-hidden py-8">
-  <div
-    class="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--background)] to-transparent z-20"
-  >
-  </div>
-  <div
-    class="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--background)] to-transparent z-20"
-  >
-  </div>
+<div class="lw-root" data-logowall>
+  <!-- Edge fades -->
+  <div class="lw-fade lw-fade-left" aria-hidden="true"></div>
+  <div class="lw-fade lw-fade-right" aria-hidden="true"></div>
 
-  <div
-    class="flex justify-center animate-scroll hover:animate-paused gap-6 md:gap-12 w-max mx-auto"
-  >
-    {
-      [...technologies, ...technologies, ...technologies].map((tech) => (
-        <div class="flex items-center gap-2 group transition-all duration-200">
-          <img
-            src={`/svg/${tech}.svg`}
-            alt={tech}
-            class="h-5 w-auto object-contain transition-transform group-hover:scale-110 opacity-60"
-            width="20"
-            height="20"
-            loading="lazy"
-          />
-          <span class="text-sm font-medium text-[var(--white-icon)]">
-            {tech.charAt(0).toUpperCase() + tech.slice(1)}
-          </span>
-        </div>
-      ))
-    }
+  <!-- Marquee track -->
+  <div class="lw-overflow">
+    <div class="lw-track" data-lw-track>
+      {
+        looped.map((tech) => (
+          <div class="lw-chip" data-lw-chip>
+            <div class="lw-chip-icon-wrap">
+              <img
+                src={`/svg/${tech.key}.svg`}
+                alt={tech.label}
+                class="lw-chip-icon"
+                width="18"
+                height="18"
+                loading="lazy"
+                draggable="false"
+              />
+            </div>
+            <span class="lw-chip-label">{tech.label}</span>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </div>
 
 <style is:global>
-  @keyframes scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-  .animate-scroll {
-    animation: scroll 60s linear infinite;
+  /* ── Root container ── */
+  .lw-root {
+    position: relative;
+    overflow: hidden;
+    padding: 0.75rem 0;
+    /* entrance: set by GSAP */
   }
 
-  @media (min-width: 768px) {
-    .animate-scroll {
-      animation-duration: 50s;
-    }
+  /* ── Overflow clip ── */
+  .lw-overflow {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* ── Scrolling track ── */
+  .lw-track {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: max-content;
+    will-change: transform;
+    animation: lw-scroll 40s linear infinite;
+    cursor: default;
+  }
+
+  /* Pause on hover of the whole track */
+  .lw-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes lw-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-33.333%); }
+  }
+
+  /* ── Individual chip ── */
+  .lw-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    background: color-mix(in srgb, currentColor 5%, transparent);
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* transition for spotlight effect */
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease;
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  /* Spotlight: when track is hovered, dim all chips… */
+  .lw-track:hover .lw-chip {
+    opacity: 0.25;
+    transform: scale(0.97);
+  }
+
+  /* …but the directly hovered chip stays bright and scales up */
+  .lw-chip:hover {
+    opacity: 1 !important;
+    transform: scale(1.08) !important;
+    background: color-mix(in srgb, currentColor 12%, transparent) !important;
+    border-color: color-mix(in srgb, currentColor 30%, transparent) !important;
+  }
+
+  /* ── Chip internals ── */
+  .lw-chip-icon-wrap {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .lw-chip-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  .lw-chip-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    /* color inherited from parent (alt-section overrides to --background) */
+  }
+
+  /* ── Edge fades ── */
+  .lw-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Default (dark bg) */
+  .lw-fade-left  { left: 0;  background: linear-gradient(to right, var(--background), transparent); }
+  .lw-fade-right { right: 0; background: linear-gradient(to left,  var(--background), transparent); }
+
+  /* Inside alt-section (green bg) */
+  .alt-section .lw-fade-left  { background: linear-gradient(to right, var(--sec), transparent); }
+  .alt-section .lw-fade-right { background: linear-gradient(to left,  var(--sec), transparent); }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .lw-track { animation-duration: 28s; gap: 0.4rem; }
+    .lw-fade  { width: 3rem; }
+    .lw-chip  { padding: 0.45rem 0.8rem 0.45rem 0.6rem; }
+    .lw-chip-icon-wrap { width: 20px; height: 20px; }
+    .lw-chip-icon { width: 18px; height: 18px; }
+    .lw-chip-label { font-size: 0.82rem; }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .lw-track { animation: none; }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // @ts-ignore
+    const gsap = window.gsap;
+    // @ts-ignore
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    // Entrance: the whole marquee slides up + fades in
+    gsap.from("[data-logowall]", {
+      y: 24,
+      opacity: 0,
+      duration: 0.9,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "[data-logowall]",
+        start: "top 88%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>
