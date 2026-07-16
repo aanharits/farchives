@@ -1,7 +1,7 @@
 <!-- Floating Theme Toggle Button (top-right corner) -->
 <button
   id="theme-toggle"
-  class="fixed top-6 right-9 z-[110] flex items-center justify-center w-[42px] h-[42px] border border-transparent rounded-full bg-[var(--background)] text-[var(--white-icon)] cursor-pointer backdrop-blur-[12px] transition-all duration-300 ease-in-out hover:text-[var(--white)] hover:bg-[var(--component-bg)] hover:border-[#ffffff10] hover:scale-[1.08] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] active:scale-95"
+  class="fixed top-6 right-9 z-[99999] flex items-center justify-center w-[42px] h-[42px] border border-transparent rounded-full bg-[var(--background)] text-[var(--white-icon)] cursor-pointer backdrop-blur-[12px] transition-all duration-300 ease-in-out hover:text-[var(--white)] hover:bg-[var(--component-bg)] hover:border-[#ffffff10] hover:scale-[1.08] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] active:scale-95"
   aria-label="Toggle dark/light mode"
 >
   <!-- Sun icon (visible in dark mode) -->
@@ -69,9 +69,48 @@
   const savedTheme = localStorage.getItem("theme") || "dark";
   setTheme(savedTheme);
 
-  themeToggle?.addEventListener("click", () => {
+  themeToggle?.addEventListener("click", (e) => {
     const current = root.getAttribute("data-theme") || "dark";
-    setTheme(current === "dark" ? "light" : "dark");
+    const nextTheme = current === "dark" ? "light" : "dark";
+
+    // @ts-ignore
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      return;
+    }
+
+    // Get click position or default to center
+    const x = e.clientX ?? window.innerWidth / 2;
+    const y = e.clientY ?? window.innerHeight / 2;
+
+    // Distance to furthest corner
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    // @ts-ignore
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 900, // 900ms for an ultra-smooth cinematic transition
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)", // Ease-out-quint — silky smooth
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    });
   });
 
   // Match nav scroll style
