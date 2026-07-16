@@ -39,8 +39,8 @@ const experiences: Experience[] = [
 ];
 ---
 
-<section id="experience" class="py-12 md:py-20 lg:py-28 text-[var(--white)]">
-  <div class="max-w-5xl mx-auto px-4">
+<section id="experience" class="py-12 md:py-20 lg:py-28 text-[var(--white)] w-full">
+  <div class="w-full">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
       <!-- Title Column -->
       <div class="md:col-span-3" data-exp-title>
@@ -165,31 +165,32 @@ const experiences: Experience[] = [
     const isMobile = window.innerWidth < 768;
     const dur = prefersReduced ? 0.01 : 0.6;
 
-    // Title slide from left
+    // Smooth entrance animations
     gsap.from("[data-exp-title]", {
-      x: isMobile ? -20 : -40,
+      x: isMobile ? -30 : -80,
       opacity: 0,
-      duration: dur,
+      filter: "blur(8px)",
+      duration: 1.2,
       ease: "power3.out",
       scrollTrigger: {
         trigger: "#experience",
-        start: isMobile ? "top 85%" : "top 75%",
+        start: "top 85%",
         toggleActions: "play none none none",
-      },
+      }
     });
 
-    // Experience items staggered
     gsap.from("[data-exp-item]", {
-      y: isMobile ? 20 : 30,
+      y: isMobile ? 30 : 60,
       opacity: 0,
-      duration: dur,
+      filter: "blur(8px)",
       stagger: 0.15,
+      duration: 1.2,
       ease: "power3.out",
       scrollTrigger: {
         trigger: "#experience",
-        start: isMobile ? "top 80%" : "top 70%",
+        start: "top 75%",
         toggleActions: "play none none none",
-      },
+      }
     });
   });
 </script>
