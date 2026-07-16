@@ -1,5 +1,4 @@
 ---
-import LogoWall from "../components/logoWall.astro";
 import { Image } from "astro:assets";
 import profileImg from "../../public/profile.jpeg";
 ---
@@ -83,10 +82,7 @@ import profileImg from "../../public/profile.jpeg";
   </div>
 </section>
 
-<!-- Logo Wall - Tech Stack -->
-<div class="pb-16 md:pb-24" data-logo-wall>
-  <LogoWall />
-</div>
+
 
 <style is:global>
   .shiny-sec {
@@ -130,43 +126,22 @@ import profileImg from "../../public/profile.jpeg";
     gsap.set("[data-hero-photo]", { opacity: 0, scale: 0.7 });
     gsap.set("[data-hero-desc]", { opacity: 0, y: isMobile ? 20 : 30 });
     gsap.set("[data-hero-cta]", { opacity: 0, y: 15 });
-    gsap.set("[data-logo-wall]", { opacity: 0, y: 20 });
+
 
     const dur = prefersReduced ? 0.01 : isMobile ? 0.6 : 0.8;
     const ease = "power3.out";
 
-    // Hero entrance timeline
+    // Hero entrance timeline (keep it for initial load)
     const tl = gsap.timeline({ delay: prefersReduced ? 0 : 0.3 });
 
     tl.to("[data-hero-name-left]", { opacity: 1, x: 0, duration: dur, ease })
-      .to(
-        "[data-hero-name-right]",
-        { opacity: 1, x: 0, duration: dur, ease },
-        "<0.1",
-      )
-      .to(
-        "[data-hero-photo]",
-        { opacity: 1, scale: 1, duration: dur * 1.1, ease: "back.out(1.4)" },
-        "<0.15",
-      )
-      .to(
-        "[data-hero-desc]",
-        { opacity: 1, y: 0, duration: dur * 0.9, ease },
-        "-=0.3",
-      )
-      .to(
-        "[data-hero-cta]",
-        { opacity: 1, y: 0, duration: dur * 0.8, ease },
-        "-=0.2",
-      )
-      .to(
-        "[data-logo-wall]",
-        { opacity: 1, y: 0, duration: dur * 0.8, ease },
-        "-=0.15",
-      );
+      .to("[data-hero-name-right]", { opacity: 1, x: 0, duration: dur, ease }, "<0.1")
+      .to("[data-hero-photo]", { opacity: 1, scale: 1, duration: dur * 1.1, ease: "back.out(1.4)" }, "<0.15")
+      .to("[data-hero-desc]", { opacity: 1, y: 0, duration: dur * 0.9, ease }, "-=0.3")
+      .to("[data-hero-cta]", { opacity: 1, y: 0, duration: dur * 0.8, ease }, "-=0.2");
 
-    // Background text parallax
     if (!prefersReduced) {
+      // Background text parallax
       gsap.to("[data-hero-bg]", {
         yPercent: isMobile ? 15 : 30,
         ease: "none",
@@ -176,6 +151,19 @@ import profileImg from "../../public/profile.jpeg";
           end: "bottom top",
           scrub: 1,
         },
+      });
+
+      // Cool parallax exit for hero content when scrolling down
+      gsap.to(".flex.flex-col.items-center", {
+        y: isMobile ? 50 : 120,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#home",
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        }
       });
     }
   });
