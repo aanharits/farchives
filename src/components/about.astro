@@ -26,13 +26,13 @@ import CatsGallery from "./catsGallery.astro";
             <p
               id="about-para-1"
               class="about-para"
-              data-text="Hi! I'm Farhan Harits Prakoso, an active IT undergraduate, currently in my 6th semester. I'm working towards a career in web development — whether that's fullstack, backend, or frontend, I'm still figuring out where I fit best. What I do know is that I care about building things that actually work well and feel good to use."
+              data-text="Hi! I'm Farhan Harits Prakoso, an active IT undergraduate, currently in my 6th semester. I'm working towards a career in web development, whether that's fullstack, backend, or frontend, I'm still figuring out where I fit best. What I do know is that I care about building things that actually work well and feel good to use."
             >
             </p>
             <p
               id="about-para-2"
               class="about-para"
-              data-text="Right now I'm leveling up on both backend and frontend — exploring how systems are built under the hood while keeping an eye on the interface side. I like staying in the loop: trying out new libraries, poking around AI tools, or just hunting for design inspiration. When I'm not coding, I'm usually down a rabbit hole on YouTube, listening to music, or just vibing. Music basically never stops playing while I work — it's the one constant in my setup."
+              data-text="Right now I'm leveling up on both backend and frontend, exploring how systems are built under the hood while keeping an eye on the interface side. I like staying in the loop: trying out new libraries, poking around AI tools, or just hunting for design inspiration. When I'm not coding, I'm usually down a rabbit hole on YouTube, listening to music, or just vibing. Music basically never stops playing while I work, it's the one constant in my setup."
             >
             </p>
           </div>
@@ -139,21 +139,18 @@ import CatsGallery from "./catsGallery.astro";
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
-    if (!gsap || !ScrollTrigger) return;
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
     const isMobile = window.innerWidth < 768;
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    /* ─────────────────────────────────────────
-       1. TITLE entrance (once in view)
-    ───────────────────────────────────────── */
+    // Title animation
     gsap.from("[data-about-title]", {
       x: isMobile ? -30 : -60,
       opacity: 0,
@@ -168,7 +165,7 @@ import CatsGallery from "./catsGallery.astro";
     });
 
     if (prefersReduced) {
-      // Skip word-reveal animation for reduced motion — just show everything
+      // skip reveal animation for accessibility
       document.querySelectorAll(".about-para").forEach((p) => {
         const text = (p as HTMLElement).dataset.text || "";
         p.textContent = text;
@@ -177,15 +174,13 @@ import CatsGallery from "./catsGallery.astro";
       return;
     }
 
-    /* ─────────────────────────────────────────
-       2. Split each paragraph into word <span>s
-    ───────────────────────────────────────── */
+    // split paragraphs into word spans
     const paras = document.querySelectorAll<HTMLElement>(".about-para");
     const allWords: HTMLElement[] = [];
 
     paras.forEach((p) => {
       const raw = p.dataset.text || "";
-      p.innerHTML = ""; // clear
+      p.innerHTML = "";
 
       raw.split(" ").forEach((word, i, arr) => {
         const span = document.createElement("span");
@@ -193,7 +188,7 @@ import CatsGallery from "./catsGallery.astro";
         span.textContent = word;
         p.appendChild(span);
 
-        // Re-add space after each word except the last
+        // add spaces back
         if (i < arr.length - 1) {
           p.appendChild(document.createTextNode(" "));
         }
@@ -202,69 +197,49 @@ import CatsGallery from "./catsGallery.astro";
       });
     });
 
-    // Set initial dim state for words
+    // set initial dim state
     gsap.set(allWords, { opacity: 0.18 });
 
-    /* ─────────────────────────────────────────
-       3. Compute exact container height so the
-          ScrollTrigger end = last word reveals.
-
-       Scroll budget = containerHeight - vh
-       (sticky card travels exactly that far)
-
-       We need:  scrollBudget = wordCount × scrollPerWord
-       → containerHeight = scrollBudget + vh
-
-       scrollPerWord: how many px of scroll per word snap.
-       Keep it small (6–8px) for a quick, responsive reveal.
-    ───────────────────────────────────────── */
+    // calculate heights for scroll reveal budget
     const vh = window.innerHeight;
     const wordCount = allWords.length;
-    const scrollPerWord = isMobile ? 7 : 6; // px of scroll per word
+    const scrollPerWord = isMobile ? 7 : 6;
     const scrollBudget = wordCount * scrollPerWord;
     const containerHeight = scrollBudget + vh;
 
     const container = document.getElementById("about-pin-container")!;
     container.style.height = `${containerHeight}px`;
 
-    /* ─────────────────────────────────────────
-       4. Word-reveal scrub timeline
-          start: sticky card top hits viewport top
-          end:   sticky card has scrolled exactly scrollBudget px
-                 = container bottom - vh
-                 = `+=${scrollBudget}` from start
-
-       scrub: true → 1:1 with scroll (no lag layer on top of Lenis)
-    ───────────────────────────────────────── */
+    // word reveal timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#about-pin-container",
         start: "top top",
-        end: `+=${scrollBudget}`,   // exact budget — zero dead zone
-        scrub: true,                 // 1:1, no smoothing lag
+        end: `+=${scrollBudget}`,
+        scrub: true,
         invalidateOnRefresh: true,
         onRefresh: (self) => {
-          // Recompute if viewport resizes
+          // recalculate on resize
           const newVh = window.innerHeight;
           const newBudget = allWords.length * scrollPerWord;
           container.style.height = `${newBudget + newVh}px`;
-          self.end = self.start + newBudget;
+          (self as any).end = self.start + newBudget;
         },
       },
     });
 
-    // Each word snaps instantly when playhead reaches it
+    // snap opacity for each word staggered
     tl.to(allWords, {
       opacity: 1,
       duration: 0,
       ease: "none",
       stagger: {
-        each: 1,      // 1 timeline-unit gap between words
+        each: 1,
         from: "start",
       },
     });
 
-    // Refresh after a tick so layout is fully settled
+    // refresh trigger once layout settles
     requestAnimationFrame(() => ScrollTrigger.refresh());
   });
 </script>
