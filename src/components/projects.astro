@@ -208,33 +208,31 @@ const projects: Project[] = [
 </style>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
   document.addEventListener("DOMContentLoaded", () => {
     // --- GSAP Animations ---
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
 
-    if (gsap && ScrollTrigger) {
-      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const isMobile = window.innerWidth < 768;
+    // Smooth entrance for title
+    gsap.from("[data-proj-title]", {
+      x: isMobile ? -30 : -80,
+      opacity: 0,
+      filter: "blur(8px)",
+      duration: 1.2,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#projects",
+        start: "top 85%",
+        toggleActions: "play none none none",
+      }
+    });
 
-      // Smooth entrance for title
-      gsap.from("[data-proj-title]", {
-        x: isMobile ? -30 : -80,
-        opacity: 0,
-        filter: "blur(8px)",
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#projects",
-          start: "top 85%",
-          toggleActions: "play none none none",
-        }
-      });
-
-      // Stacked Cards Logic
-      const cards = gsap.utils.toArray(".project-stacked-card");
-    }
+    // Stacked Cards Logic
+    const cards = gsap.utils.toArray(".project-stacked-card");
   });
 </script>
