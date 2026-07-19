@@ -52,7 +52,7 @@
           <div class="mt-8" data-contact-content>
             <p class="text-sm text-[var(--white-icon)] mb-4">
               Let's be <a
-                href="https://open.spotify.com/user/312467646"
+                href="https://open.spotify.com/user/hqu6f5db55iw7206tew9b4my4?si=33d2b2ce84fa42f7"
                 target="_blank"
                 class="text-[var(--white)] hover:text-[var(--sec)] transition-colors font-medium"
                 >Spotify</a
@@ -61,7 +61,7 @@
             <iframe
               data-testid="embed-iframe"
               style="border-radius:12px"
-              src="https://open.spotify.com/embed/playlist/5YRcKyMlyTFGZnW8SomGHH?utm_source=generator"
+              src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
               width="100%"
               height="152"
               allowfullscreen=""
@@ -152,6 +152,11 @@
 </section>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
   document.addEventListener("DOMContentLoaded", () => {
     // --- Lazy-load Spotify iframes ---
     const spotifyFrames = document.querySelectorAll("iframe.spotify-lazy");
@@ -176,11 +181,6 @@
     }
 
     // --- GSAP Animations ---
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
-    if (!gsap || !ScrollTrigger) return;
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
