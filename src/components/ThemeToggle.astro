@@ -65,8 +65,8 @@
     }
   }
 
-  // Initialize from saved preference
-  const savedTheme = localStorage.getItem("theme") || "dark";
+  // Align with theme set by Layout.astro
+  const savedTheme = root.getAttribute("data-theme") || localStorage.getItem("theme") || "dark";
   setTheme(savedTheme);
 
   themeToggle?.addEventListener("click", (e) => {
@@ -79,41 +79,45 @@
       return;
     }
 
-    // Get click position or default to center
-    const x = e.clientX ?? window.innerWidth / 2;
-    const y = e.clientY ?? window.innerHeight / 2;
+    // Click coords for circular reveal animation
+    const rect = themeToggle.getBoundingClientRect();
+    const x = e.clientX || (rect.left + rect.width / 2);
+    const y = e.clientY || (rect.top + rect.height / 2);
 
-    // Distance to furthest corner
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    );
+    // Remove old transition styles
+    document.getElementById("theme-transition-style")?.remove();
+
+    // Inject custom circular wipe animation centered at click point
+    const transitionStyle = document.createElement("style");
+    transitionStyle.id = "theme-transition-style";
+    transitionStyle.innerHTML = `
+      @keyframes circular-wipe {
+        from {
+          clip-path: circle(0px at ${x}px ${y}px);
+        }
+        to {
+          clip-path: circle(150vmax at ${x}px ${y}px);
+        }
+      }
+    `;
+    document.head.appendChild(transitionStyle);
+
+    // Disable default CSS transitions during custom theme reveal
+    root.classList.add("theme-transition-active");
 
     // @ts-ignore
     const transition = document.startViewTransition(() => {
       setTheme(nextTheme);
     });
 
-    transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
-
-      document.documentElement.animate(
-        {
-          clipPath: clipPath,
-        },
-        {
-          duration: 900, // 900ms for an ultra-smooth cinematic transition
-          easing: "cubic-bezier(0.22, 1, 0.36, 1)", // Ease-out-quint — silky smooth
-          pseudoElement: "::view-transition-new(root)",
-        },
-      );
+    // Reset styles once reveal ends
+    transition.finished.then(() => {
+      root.classList.remove("theme-transition-active");
+      transitionStyle.remove();
     });
   });
 
-  // Match nav scroll style
+  // Toggle toggle-btn background when scrolled
   window.addEventListener(
     "scroll",
     () => {
