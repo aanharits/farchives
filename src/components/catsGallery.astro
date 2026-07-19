@@ -130,13 +130,12 @@ import { cats } from "../data/cats";
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
-    if (!gsap || !ScrollTrigger) return;
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
     let ctx = gsap.context(() => {
       // 1. Entrance Animation
       gsap.from("[data-terminal-widget]", {
