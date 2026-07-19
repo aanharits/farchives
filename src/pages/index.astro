@@ -10,7 +10,7 @@ import Contact from "@/components/contact.astro";
 import Footer from "@/components/footer.astro";
 ---
 
-<Layout title="farchives.">
+<Layout title="Farhan | Portofolio">
   <!-- Global Nav Overlay to prevent GSAP pins from covering fixed navigation -->
   <div class="fixed top-0 left-0 w-full h-0 pointer-events-none z-[999999]">
     <div class="pointer-events-auto">
@@ -73,19 +73,17 @@ import Footer from "@/components/footer.astro";
 </style>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
   document.addEventListener("DOMContentLoaded", () => {
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
+    // 3d stacked scroll animations
 
-    if (!gsap || !ScrollTrigger) return;
-
-    // Advanced 3D Stack / Velocity Scroll Effect
-
-    // 1. Pinning Logic (only for simple wrappers that need JS pinning)
+    // pin sections on scroll
     const pinWrappers = gsap.utils.toArray(".section-pin-wrapper");
-    pinWrappers.forEach((wrapper) => {
+    pinWrappers.forEach((wrapper: any) => {
       ScrollTrigger.create({
         trigger: wrapper,
         start: () =>
@@ -98,14 +96,13 @@ import Footer from "@/components/footer.astro";
       });
     });
 
-    // 2. Blur / Dim Logic (for all stacked sections)
+    // blur and dim sections as next ones overlap them
     const stackSections = gsap.utils.toArray(".scroll-stack-section");
-    stackSections.forEach((section, i) => {
-      // Find the card inside, whether it's a generic section-card or the specific about-sticky-card
+    stackSections.forEach((section: any, i) => {
       const card = section.querySelector(".section-card, .about-sticky-card");
-      
+
       if (i < stackSections.length - 1 && card) {
-        const nextSection = stackSections[i + 1];
+        const nextSection = stackSections[i + 1] as HTMLElement;
 
         gsap.to(card, {
           opacity: 0.15,
@@ -113,8 +110,8 @@ import Footer from "@/components/footer.astro";
           ease: "none",
           scrollTrigger: {
             trigger: nextSection,
-            start: "top 60%", // Blur starts late, when next section covers bottom 40%
-            end: "top top", // Finishes when fully covered
+            start: "top 60%", // start blur late
+            end: "top top", // finish when covered
             scrub: true,
             invalidateOnRefresh: true,
           },
