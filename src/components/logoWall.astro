@@ -179,13 +179,12 @@ const looped = [...technologies, ...technologies, ...technologies];
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // @ts-ignore
-    const gsap = window.gsap;
-    // @ts-ignore
-    const ScrollTrigger = window.ScrollTrigger;
-    if (!gsap || !ScrollTrigger) return;
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
     // Entrance: the whole marquee slides up + fades in
     gsap.from("[data-logowall]", {
       y: 24,
