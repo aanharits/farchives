@@ -66,55 +66,14 @@
   }
 
   // Align with theme set by Layout.astro
-  const savedTheme = root.getAttribute("data-theme") || localStorage.getItem("theme") || "dark";
+  const savedTheme =
+    root.getAttribute("data-theme") || localStorage.getItem("theme") || "dark";
   setTheme(savedTheme);
 
-  themeToggle?.addEventListener("click", (e) => {
+  themeToggle?.addEventListener("click", () => {
     const current = root.getAttribute("data-theme") || "dark";
     const nextTheme = current === "dark" ? "light" : "dark";
-
-    // @ts-ignore
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    // Click coords for circular reveal animation
-    const rect = themeToggle.getBoundingClientRect();
-    const x = e.clientX || (rect.left + rect.width / 2);
-    const y = e.clientY || (rect.top + rect.height / 2);
-
-    // Remove old transition styles
-    document.getElementById("theme-transition-style")?.remove();
-
-    // Inject custom circular wipe animation centered at click point
-    const transitionStyle = document.createElement("style");
-    transitionStyle.id = "theme-transition-style";
-    transitionStyle.innerHTML = `
-      @keyframes circular-wipe {
-        from {
-          clip-path: circle(0px at ${x}px ${y}px);
-        }
-        to {
-          clip-path: circle(150vmax at ${x}px ${y}px);
-        }
-      }
-    `;
-    document.head.appendChild(transitionStyle);
-
-    // Disable default CSS transitions during custom theme reveal
-    root.classList.add("theme-transition-active");
-
-    // @ts-ignore
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-    });
-
-    // Reset styles once reveal ends
-    transition.finished.then(() => {
-      root.classList.remove("theme-transition-active");
-      transitionStyle.remove();
-    });
+    setTheme(nextTheme);
   });
 
   // Toggle toggle-btn background when scrolled
