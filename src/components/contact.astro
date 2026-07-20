@@ -2,10 +2,10 @@
 
 ---
 
-<section id="contact" class="py-20 md:py-20 overflow-hidden">
+<section id="contact" class="py-20 overflow-hidden">
   <div class="max-w-6xl mx-auto px-4">
-    <!-- Mobile Layout: Stacked -->
-    <div class="block md:hidden">
+    <!-- Mobile/Tablet Layout: Stacked -->
+    <div class="block lg:hidden">
       <div class="relative">
         <!-- Circle - Positioned left -->
         <div
@@ -59,9 +59,10 @@
               > moots! Check out what I'm listening to:
             </p>
             <iframe
+              class="spotify-lazy"
               data-testid="embed-iframe"
               style="border-radius:12px"
-              src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
+              data-src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
               width="100%"
               height="152"
               allowfullscreen=""
@@ -75,7 +76,7 @@
     </div>
 
     <!-- Desktop Layout: Side by side -->
-    <div class="hidden md:block">
+    <div class="hidden lg:block">
       <div class="relative min-h-[450px]">
         <!-- Decorative Circle -->
         <div
@@ -134,9 +135,10 @@
               > moots! Check out what I'm listening to:
             </p>
             <iframe
+              class="spotify-lazy"
               data-testid="embed-iframe"
               style="border-radius:12px"
-              src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
+              data-src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
               width="100%"
               height="152"
               allowfullscreen=""
@@ -185,7 +187,7 @@
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 1024;
     const dur = prefersReduced ? 0.01 : 0.8;
 
     if (isMobile) {
@@ -266,3 +268,4 @@
     }
   });
 </script>
+
