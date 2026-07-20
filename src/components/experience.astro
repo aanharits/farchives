@@ -39,7 +39,10 @@ const experiences: Experience[] = [
 ];
 ---
 
-<section id="experience" class="py-12 md:py-20 lg:py-28 text-[var(--white)] w-full">
+<section
+  id="experience"
+  class="py-12 md:py-20 lg:py-28 text-[var(--white)] w-full"
+>
   <div class="w-full">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
       <!-- Title Column -->
@@ -113,38 +116,50 @@ const experiences: Experience[] = [
   }
 
   /* ── Dark mode (default) ── */
-  .exp-badge--remote { color: rgba(147, 197, 253, 0.75); }
+  .exp-badge--remote {
+    color: rgba(147, 197, 253, 0.75);
+  }
   .exp-badge--remote .exp-badge__dot {
     background: rgb(96, 165, 250);
     box-shadow: 0 0 5px rgba(96, 165, 250, 0.55);
   }
 
-  .exp-badge--onsite { color: rgba(252, 211, 77, 0.75); }
+  .exp-badge--onsite {
+    color: rgba(252, 211, 77, 0.75);
+  }
   .exp-badge--onsite .exp-badge__dot {
     background: rgb(251, 191, 36);
     box-shadow: 0 0 5px rgba(251, 191, 36, 0.55);
   }
 
-  .exp-badge--hybrid { color: rgba(196, 181, 253, 0.75); }
+  .exp-badge--hybrid {
+    color: rgba(196, 181, 253, 0.75);
+  }
   .exp-badge--hybrid .exp-badge__dot {
     background: rgb(167, 139, 250);
     box-shadow: 0 0 5px rgba(167, 139, 250, 0.55);
   }
 
   /* ── Light mode ── darker for contrast on cream #f0e9d4 */
-  [data-theme="light"] .exp-badge--remote { color: #1e3a8a; }
+  [data-theme="light"] .exp-badge--remote {
+    color: #1e3a8a;
+  }
   [data-theme="light"] .exp-badge--remote .exp-badge__dot {
     background: #1d4ed8;
     box-shadow: none;
   }
 
-  [data-theme="light"] .exp-badge--onsite { color: #78350f; }
+  [data-theme="light"] .exp-badge--onsite {
+    color: #78350f;
+  }
   [data-theme="light"] .exp-badge--onsite .exp-badge__dot {
     background: #b45309;
     box-shadow: none;
   }
 
-  [data-theme="light"] .exp-badge--hybrid { color: #4c1d95; }
+  [data-theme="light"] .exp-badge--hybrid {
+    color: #4c1d95;
+  }
   [data-theme="light"] .exp-badge--hybrid .exp-badge__dot {
     background: #6d28d9;
     box-shadow: none;
@@ -175,7 +190,7 @@ const experiences: Experience[] = [
         trigger: "#experience",
         start: "top 85%",
         toggleActions: "play none none none",
-      }
+      },
     });
 
     gsap.from("[data-exp-item]", {
@@ -189,7 +204,7 @@ const experiences: Experience[] = [
         trigger: "#experience",
         start: "top 75%",
         toggleActions: "play none none none",
-      }
+      },
     });
   });
 </script>
