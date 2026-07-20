@@ -12,27 +12,33 @@ const { title } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Hi, my name is Farhan Harits Prakoso and this is my portfolio. Check it out!" />
+    <meta
+      name="description"
+      content="Hi, my name is Farhan Harits Prakoso and this is my portfolio. Check it out!"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="preconnect" href="https://open.spotify.com" />
     <link rel="dns-prefetch" href="https://open.spotify.com" />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Hi, my name is Farhan Harits Prakoso and this is my portfolio. Check it out!" />
     <meta
-      property="og:image"
-      content="https://www.farchives.dev/favicon.png"
+      property="og:description"
+      content="Hi, my name is Farhan Harits Prakoso and this is my portfolio. Check it out!"
     />
+    <meta property="og:image" content="https://www.farchives.dev/favicon.png" />
     <meta property="og:url" content="https://www.farchives.dev" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Farhan | Portofolio" />
 
     <title>{title}</title>
 
-    <!-- Set theme early to prevent dark/light flash on reload -->
+    <!-- Set theme early to prevent dark/light flash on reload & setup JS class -->
     <script is:inline>
       const theme = (() => {
-        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
           return localStorage.getItem("theme");
         }
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -41,6 +47,7 @@ const { title } = Astro.props;
         return "light";
       })();
       document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.classList.add("js");
     </script>
 
     <!-- Bundle GSAP and Lenis locally for better performance -->
@@ -75,6 +82,12 @@ const { title } = Astro.props;
         lenis.raf(time * 1000);
       });
       gsap.ticker.lagSmoothing(0, 0);
+
+      // Refresh ScrollTrigger and Lenis after all assets (fonts, images) are fully loaded
+      window.addEventListener("load", () => {
+        ScrollTrigger.refresh();
+        lenis.resize();
+      });
     </script>
   </head>
   <body class="bg-[--background]">
@@ -176,12 +189,6 @@ const { title } = Astro.props;
     color: var(--background) !important;
   }
 
-  @font-face {
-    font-family: "Montserrat Variable";
-    font-display: swap;
-    src: local("Montserrat Variable");
-  }
-
   * {
     font-family:
       "Montserrat Variable",
@@ -227,37 +234,5 @@ const { title } = Astro.props;
     pointer-events: none;
   }
 
-  /* Smooth Theme view transition styles (circular paint wipe) */
-  ::view-transition-image-pair(root) {
-    isolation: auto;
-  }
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-  ::view-transition-old(root) {
-    z-index: 1;
-  }
-  ::view-transition-new(root) {
-    z-index: 999999;
-    animation: 900ms cubic-bezier(0.22, 1, 0.36, 1) circular-wipe;
-  }
-
-  @keyframes circular-wipe {
-    from {
-      clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
-    }
-    to {
-      clip-path: circle(150vmax at var(--x, 50%) var(--y, 50%));
-    }
-  }
-
-  /* Disable transitions on all elements while the theme transition is active */
-  .theme-transition-active,
-  .theme-transition-active *,
-  .theme-transition-active *::before,
-  .theme-transition-active *::after {
-    transition: none !important;
-  }
 </style>
+
