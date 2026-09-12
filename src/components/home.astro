@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import profileImg from "../../public/profile3.png";
+import profileImg from "../../public/profile.jpeg";
 ---
 
 <section class="text-[var(--white)] relative overflow-visible" id="home">
@@ -41,8 +41,9 @@ import profileImg from "../../public/profile3.png";
               alt="Farhan Harits Prakoso"
               width={128}
               height={128}
+              densities={[1, 2, 3]}
               format="webp"
-              quality={80}
+              quality="max"
               class="w-full h-full object-cover"
               loading="eager"
               fetchpriority="high"
