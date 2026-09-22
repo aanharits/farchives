@@ -1,0 +1,174 @@
+---
+interface Props {
+  cvUrl: string;
+}
+
+const { cvUrl } = Astro.props;
+---
+
+<!-- CV Preview Modal (Clean Native Browser PDF Viewer) -->
+<div
+  id="cv-modal"
+  class="fixed inset-0 z-[1000000] hidden items-center justify-center p-2 sm:p-4 md:p-6"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop -->
+  <div
+    id="cv-modal-backdrop"
+    class="fixed inset-0 bg-black/80 backdrop-blur-sm opacity-0 cursor-pointer"
+  >
+  </div>
+
+  <!-- Modal Content Card: Native PDF Viewer -->
+  <div
+    id="cv-modal-card"
+    class="relative z-10 w-full max-w-6xl h-[92vh] rounded-xl overflow-hidden shadow-2xl bg-[#1e1e1e] flex flex-col opacity-0 pointer-events-auto border border-[var(--white-icon-tr)]"
+  >
+    <!-- Floating Close Button -->
+    <button
+      id="cv-modal-close"
+      type="button"
+      class="absolute top-3.5 right-3.5 z-30 flex items-center justify-center w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white/80 hover:text-white backdrop-blur-md transition-all duration-200 cursor-pointer shadow-lg active:scale-95 border border-white/20"
+      aria-label="Close modal"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Native Browser PDF Viewer -->
+    <iframe
+      id="cv-pdf-frame"
+      src={cvUrl}
+      class="w-full h-full border-0 rounded-xl"
+      title="Farhan Harits Prakoso CV"
+    ></iframe>
+  </div>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  function initCvModal() {
+    const openCvBtn = document.getElementById("open-cv-modal");
+    const cvModal = document.getElementById("cv-modal");
+    const cvBackdrop = document.getElementById("cv-modal-backdrop");
+    const cvCard = document.getElementById("cv-modal-card");
+    const cvCloseBtn = document.getElementById("cv-modal-close");
+
+    if (!cvModal || !openCvBtn) return;
+
+    if (cvModal.parentElement !== document.body) {
+      document.body.appendChild(cvModal);
+    }
+
+    let isModalOpen = false;
+
+    const openModal = () => {
+      if (isModalOpen) return;
+      isModalOpen = true;
+
+      // Close opportunities card popover if open
+      const oppsCard = document.getElementById("opps-card");
+      const oppsBadge = document.getElementById("opps-badge");
+      if (oppsCard && oppsBadge) {
+        oppsCard.classList.add("pointer-events-none", "opacity-0");
+        oppsBadge.classList.remove(
+          "border-[var(--sec)]",
+          "shadow-[0_0_15px_rgba(110,142,83,0.15)]",
+        );
+        gsap.killTweensOf(oppsCard);
+      }
+
+      cvModal.classList.remove("hidden");
+      cvModal.classList.add("flex");
+
+      document.body.style.overflow = "hidden";
+      (window as any).lenis?.stop();
+
+      gsap.killTweensOf([cvBackdrop, cvCard]);
+      gsap.to(cvBackdrop, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+      gsap.fromTo(
+        cvCard,
+        { opacity: 0, scale: 0.94, y: 15 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.35,
+          ease: "back.out(1.4)",
+        },
+      );
+    };
+
+    const closeModal = () => {
+      if (!isModalOpen) return;
+      isModalOpen = false;
+
+      gsap.killTweensOf([cvBackdrop, cvCard]);
+      gsap.to(cvBackdrop, {
+        opacity: 0,
+        duration: 0.25,
+        ease: "power2.in",
+      });
+      gsap.to(cvCard, {
+        opacity: 0,
+        scale: 0.95,
+        y: 10,
+        duration: 0.25,
+        ease: "power2.in",
+        onComplete: () => {
+          if (!isModalOpen) {
+            cvModal.classList.remove("flex");
+            cvModal.classList.add("hidden");
+            document.body.style.overflow = "";
+            (window as any).lenis?.start();
+          }
+        },
+      });
+    };
+
+    openCvBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModal();
+    });
+
+    cvCloseBtn?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeModal();
+    });
+
+    cvBackdrop?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isModalOpen) {
+        closeModal();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCvModal);
+  } else {
+    initCvModal();
+  }
+</script>
