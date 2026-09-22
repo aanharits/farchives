@@ -1,5 +1,5 @@
 ---
-
+import SpotifyWidget from "./SpotifyWidget.astro";
 ---
 
 <section id="contact" class="py-20 overflow-hidden">
@@ -49,27 +49,8 @@
           </p>
 
           <!-- Spotify Section -->
-          <div class="mt-8" data-contact-content>
-            <p class="text-sm text-[var(--white-icon)] mb-4">
-              Let's be <a
-                href="https://open.spotify.com/user/hqu6f5db55iw7206tew9b4my4?si=33d2b2ce84fa42f7"
-                target="_blank"
-                class="text-[var(--white)] hover:text-[var(--sec)] transition-colors font-medium"
-                >Spotify</a
-              > moots! Check out what I'm listening to:
-            </p>
-            <iframe
-              class="spotify-lazy"
-              data-testid="embed-iframe"
-              style="border-radius:12px"
-              data-src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
-              width="100%"
-              height="152"
-              allowfullscreen=""
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            >
-            </iframe>
+          <div data-contact-content>
+            <SpotifyWidget class="mt-8" />
           </div>
         </div>
       </div>
@@ -125,28 +106,7 @@
           </p>
 
           <!-- Spotify Section -->
-          <div class="mt-8">
-            <p class="text-md text-[var(--white-icon)] mb-3">
-              Let's be <a
-                href="https://open.spotify.com/user/hqu6f5db55iw7206tew9b4my4?si=33d2b2ce84fa42f7"
-                target="_blank"
-                class="text-[var(--white)] hover:text-[var(--sec)] transition-colors font-medium"
-                >Spotify</a
-              > moots! Check out what I'm listening to:
-            </p>
-            <iframe
-              class="spotify-lazy"
-              data-testid="embed-iframe"
-              style="border-radius:12px"
-              data-src="https://open.spotify.com/embed/playlist/29WQChrDuDDDYE7tVdDChe?utm_source=generator&si=c48e34fdc54f4905"
-              width="100%"
-              height="152"
-              allowfullscreen=""
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            >
-            </iframe>
-          </div>
+          <SpotifyWidget class="mt-8" />
         </div>
       </div>
     </div>
@@ -160,28 +120,6 @@
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
-    // --- Lazy-load Spotify iframes ---
-    const spotifyFrames = document.querySelectorAll("iframe.spotify-lazy");
-    if (spotifyFrames.length > 0) {
-      const lazyObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const iframe = entry.target as HTMLIFrameElement;
-              const src = iframe.getAttribute("data-src");
-              if (src && !iframe.src) {
-                iframe.src = src;
-              }
-              lazyObserver.unobserve(iframe);
-            }
-          });
-        },
-        { rootMargin: "200px" },
-      );
-
-      spotifyFrames.forEach((frame) => lazyObserver.observe(frame));
-    }
-
     // --- GSAP Animations ---
 
     const prefersReduced = window.matchMedia(
