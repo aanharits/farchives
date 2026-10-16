@@ -1,5 +1,6 @@
 ---
 import "@fontsource-variable/montserrat";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -32,6 +33,7 @@ const { title } = Astro.props;
     <meta property="og:site_name" content="Farhan | Portofolio" />
 
     <title>{title}</title>
+    <ClientRouter />
 
     <!-- Set theme early to prevent dark/light flash on reload & setup JS class -->
     <script is:inline>
@@ -64,30 +66,65 @@ const { title } = Astro.props;
       (window as any).ScrollTrigger = ScrollTrigger;
       (window as any).Lenis = Lenis;
 
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: "vertical",
-        gestureOrientation: "vertical",
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-      } as any);
+      let lenis: any = null;
 
-      (window as any).lenis = lenis;
+      function initLenis() {
+        if (!lenis) {
+          lenis = new Lenis({
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: "vertical",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+          } as any);
 
-      lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
+          (window as any).lenis = lenis;
+
+          lenis.on("scroll", ScrollTrigger.update);
+          gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+          });
+          gsap.ticker.lagSmoothing(0, 0);
+        }
+      }
+
+      initLenis();
+
+      // Clean up previous ScrollTriggers before swapping page DOM in ClientRouter
+      document.addEventListener("astro:before-swap", () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       });
-      gsap.ticker.lagSmoothing(0, 0);
 
-      // Refresh ScrollTrigger and Lenis after all assets (fonts, images) are fully loaded
-      window.addEventListener("load", () => {
-        ScrollTrigger.refresh();
-        lenis.resize();
+      // Immediately reset scroll to top on DOM swap if not targeting an anchor hash
+      document.addEventListener("astro:after-swap", () => {
+        if (!window.location.hash) {
+          window.scrollTo(0, 0);
+          if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
+          }
+        }
+      });
+
+      // Refresh ScrollTrigger and Lenis on page load and route changes
+      document.addEventListener("astro:page-load", () => {
+        if (lenis) {
+          lenis.resize();
+          const hash = window.location.hash;
+          if (hash) {
+            setTimeout(() => {
+              lenis.scrollTo(hash, { immediate: false, duration: 0.8 });
+              ScrollTrigger.refresh();
+            }, 60);
+          } else {
+            lenis.scrollTo(0, { immediate: true });
+            window.scrollTo(0, 0);
+            ScrollTrigger.refresh();
+          }
+        }
       });
     </script>
   </head>
@@ -97,6 +134,40 @@ const { title } = Astro.props;
 </html>
 
 <style is:global>
+  /* ─── Ultra-Smooth View Transition Animations ─── */
+  @keyframes pageFadeOut {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.995);
+      filter: blur(4px);
+    }
+  }
+
+  @keyframes pageFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.995);
+      filter: blur(4px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
+  }
+
+  ::view-transition-old(root) {
+    animation: 250ms cubic-bezier(0.4, 0, 0.2, 1) both pageFadeOut;
+  }
+
+  ::view-transition-new(root) {
+    animation: 320ms cubic-bezier(0.16, 1, 0.3, 1) both pageFadeIn;
+  }
   /* Ensure fixed nav elements are always visible */
   #hamburger-btn,
   #theme-toggle {
