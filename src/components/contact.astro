@@ -119,7 +119,7 @@ import SpotifyWidget from "./SpotifyWidget.astro";
 
   gsap.registerPlugin(ScrollTrigger);
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     // --- GSAP Animations ---
 
     const prefersReduced = window.matchMedia(
