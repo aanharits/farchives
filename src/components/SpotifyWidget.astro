@@ -63,9 +63,5 @@ const {
     spotifyFrames.forEach((frame) => lazyObserver.observe(frame));
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSpotifyLazy);
-  } else {
-    initSpotifyLazy();
-  }
+  document.addEventListener("astro:page-load", initSpotifyLazy);
 </script>
