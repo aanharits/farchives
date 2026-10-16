@@ -1,6 +1,6 @@
 ---
 import LogoWall from "./logoWall.astro";
-import CatsGallery from "./catsGallery.astro";
+// import CatsGallery from "./catsGallery.astro";
 
 const para1Text =
   "Hi! I'm Farhan Harits Prakoso (Aan), an active IT undergraduate, currently in my 6th semester. I'm working towards a career in web development, whether that's fullstack, backend, or frontend, I'm still figuring out where I fit best. What I do know is that I care about building things that actually work well and feel good to use.";
@@ -62,11 +62,80 @@ const para2Text =
           <LogoWall />
         </div>
 
-        <!-- 3. Cats Gallery (Mobile: order-3, Desktop: order-2, side column, vertically centered) -->
+        <!-- 3. Cats Gallery & Newspaper Research Note (Mobile: order-3, Desktop: order-2, side column, vertically centered) -->
         <div
-          class="cats-widget-container md:col-span-5 xl:col-span-4 mt-4 md:mt-0 order-3 md:order-2 md:self-center"
+          class="cats-widget-container md:col-span-5 xl:col-span-4 mt-4 md:mt-0 order-3 md:order-2 md:self-center flex flex-col justify-center"
         >
-          <CatsGallery />
+          <!-- <CatsGallery /> -->
+
+          <!-- Note / Lead-in Header -->
+          <div
+            class="w-full max-w-sm mx-auto lg:mx-0 lg:ml-auto mb-2 flex items-center justify-between font-mono text-[11px] text-[var(--white-icon)]"
+          >
+            <span class="flex items-center gap-1.5">
+              <span class="text-[var(--sec)]">✻</span>
+              <span>Also read my undergraduate research:</span>
+            </span>
+            <span class="text-[9px] text-[var(--sec)] font-bold uppercase tracking-wider">PI // 2026</span>
+          </div>
+
+          <!-- Authentic Newspaper Broadsheet Paper Clipping -->
+          <div
+            class="newspaper-clipping themed-card w-full max-w-sm mx-auto lg:mx-0 lg:ml-auto rounded-lg overflow-hidden border-2 border-black/80 bg-[#f0e9d4] text-[#161616] shadow-2xl p-4 sm:p-5 flex flex-col gap-3 font-serif select-none"
+            data-research-note
+          >
+            <!-- Newspaper Ear & Top Date Bar -->
+            <div
+              class="flex items-center justify-between text-[9px] font-mono uppercase tracking-widest text-[#555] border-b border-black/40 pb-1.5"
+            >
+              <span>BY FARHAN HARITS PRAKOSO</span>
+              <span class="font-bold text-black">No. 50423457</span>
+            </div>
+
+            <!-- Authentic Newspaper Masthead with Double Rule -->
+            <div class="border-y-2 border-double border-black py-2 text-center">
+              <h3
+                class="text-base sm:text-lg font-black tracking-wider uppercase font-serif text-black leading-none"
+              >
+                The Research Chronicle
+              </h3>
+              <p class="text-[9px] italic text-[#444] tracking-normal mt-1">
+                Special Investigative Dispatch on Modern Web Architecture &
+                Frontend Systems
+              </p>
+            </div>
+
+            <!-- Lead Headline -->
+            <div class="flex flex-col gap-1 border-b border-black/30 pb-2">
+              <h4
+                class="text-xs sm:text-sm font-bold tracking-tight text-black leading-snug"
+              >
+                The Frontend Paradox: Astro Wins the Browser, Yet React Holds
+                the Server Gate
+              </h4>
+              <p class="text-[10px] italic text-[#444] leading-tight">
+                A 126-page trial reveals why Astro paints 47.8% faster in the
+                browser, while React dispatches packets 11ms quicker under
+                concurrency.
+              </p>
+            </div>
+
+            <!-- Bottom Read More Bar -->
+            <div
+              class="pt-1 flex items-center justify-between font-mono text-[10px]"
+            >
+              <span class="text-[9px] text-[#555] uppercase"
+                >Turn to Page 2</span
+              >
+              <a
+                href="/research"
+                class="inline-flex items-center gap-1.5 font-bold text-black hover:text-purple-900 transition-colors underline decoration-black/40 hover:decoration-black"
+              >
+                <span>Read Full Newspaper Edition</span>
+                <span class="font-serif">→</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -163,7 +232,7 @@ const para2Text =
 
   gsap.registerPlugin(ScrollTrigger);
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const isMobile = window.innerWidth < 768;
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
