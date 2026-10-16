@@ -166,9 +166,5 @@ const { cvUrl } = Astro.props;
     });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initCvModal);
-  } else {
-    initCvModal();
-  }
+  document.addEventListener("astro:page-load", initCvModal);
 </script>
