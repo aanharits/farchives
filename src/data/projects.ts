@@ -5,6 +5,7 @@ import sayurhub from "../../public/sayurhub.jpeg";
 import emigria from "../../public/emigria.jpeg";
 import sehathemat from "../../public/sehathemat.jpeg";
 import glance from "../../public/glance.jpeg";
+import lostnfound from "../../public/lost-n-found.jpeg";
 
 export interface Project {
   title: string;
@@ -62,5 +63,13 @@ export const projects: Project[] = [
     preview: "https://github.com/aanharits/glance",
     description:
       "A native macOS menu bar app that explains anything you copy in one second. Hit Cmd+Shift+S, copy any confusing code, error log, or paragraph, and Glance instantly pops up an ELI5 explanation or TL;DR using ultra-fast LLMs. No context switching, no browser tabs, near-zero footprint.",
+  },
+  {
+    title: "Lost n Found",
+    image: lostnfound as ImageMetadata,
+    link: "https://github.com/aanharits/lost-n-found",
+    preview: "https://lost-n-found-pi-liart.vercel.app/lobby",
+    description:
+      "A modern campus lost-and-found platform powered by Zero-Knowledge Proofs (ZKP), Gale-Shapley Stable Matching, and Groq Semantic AI, wrapped in a retro pixel-art pinboard interface.",
   },
 ];
