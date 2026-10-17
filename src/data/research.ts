@@ -60,7 +60,7 @@ export const researchPaper: ResearchData = {
   program: "Informatika — Fakultas Teknologi Industri",
   advisor: "Dwi Widiastuti, S.Kom., MMSI.",
   defenseDate: "September 1, 2026",
-  pdfUrl: "/docs/Revisi%20PI%20Farhan.pdf",
+  pdfUrl: "/docs/Astro_vs_React_Landing_Page_Performance_Analysis.pdf",
   abstract: {
     summary:
       "React JS holds undisputed industry dominance (44.7% Stack Overflow 2025; 67% State of JS 2024), yet Client-Side Rendering (CSR) introduces severe mobile latency when applied to static landing pages. While Astro's official documentation asserts superior speed via its Zero-JS Islands Architecture, theoretical claims require rigorous empirical proof. This 126-page trial delivers the first simultaneous benchmark evaluating identical media-heavy prototypes across both client Core Web Vitals and 300-thread server stress.",
